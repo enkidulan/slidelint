@@ -18,16 +18,18 @@ setup(name='slidelint',
       package_dir={'': 'src'},
       include_package_data=True,
       zip_safe=False,
-      tests_require = ['testfixtures'],
       install_requires=[
           'setuptools',
           'docopt',
           'configparser',
           # -*- Extra requirements: -*-
       ],
+      extras_require= {
+          'tests': ['testfixtures', ]
+      },
       entry_points="""
       [console_scripts]
-      slidelint = slidelint.cli:main
+      slidelint = slidelint.pipeline_runner:main
       [slidelint.text]
       contents = slidelint.pipes.contents:main
       text_contrast = slidelint.pipes.text_contrast:main

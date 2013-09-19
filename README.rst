@@ -99,3 +99,5 @@ Be careful - in case of non unique checkers names results of command line
 pipeline configuration can be unpredictable. Enabling checker allowed only in
 case if its category was enabled also, otherwise it will be ignored.
 For configuration removing operation will be applied after extending.
+
+Enabling and disabling messages by id do pluggins themselves.
