@@ -1,8 +1,10 @@
 """
-Example of program with many options using docopt.
+slidelint version 1.0dev
+
+PDF slides common problems checker.
 
 Usage:
-  slidelint help-msg [<msg_id>...]
+  slidelint help-msg [msg_id...]
   slidelint [options] FILE
 
 Arguments:
@@ -11,7 +13,6 @@ Arguments:
 
 Options:
   -h --help              show this help message and exit
-  --version              show version and exit
   -i --include-ids       include ids in report [default: False]
   --config=<configfile>  path to configuration file
   -f <format> --output-format=<format>  Set the output format
@@ -144,7 +145,7 @@ def main():
      '--include-ids': False,
      '--output-format': 'text',
      '--version': False,
-     '<msg_id>': [],
+     'msg_id': [],
      'FILE': 'sample.pdf',
      'help-msg': False}
     """
@@ -159,4 +160,3 @@ def main():
     if config['--files-output']:
         return data_writer(output, formatter.format)
     print output
-
