@@ -37,18 +37,18 @@ def id_clasify(data):
 
     (messages_ids, ckeckers_ids, categories_ids)
 
-    >>> id_clasify("cheko,cat.one,chekt,w123,cat.two,w234,chekn")
-    (['w123', 'w234'], ['cheko', 'chekt', 'chekn'], ['cat.one', 'cat.two'])
+    >>> id_clasify("cheko,cat.one,chekt,w1234,cat.two,w2345,chekn")
+    (['w1234', 'w2345'], ['cheko', 'chekt', 'chekn'], ['cat.one', 'cat.two'])
     >>> id_clasify("chekn")
     ([], ['chekn'], [])
-    >>> id_clasify("c456")
-    (['c456'], [], [])
+    >>> id_clasify("c4567")
+    (['c4567'], [], [])
     >>> id_clasify("chekn.fds")
     ([], [], ['chekn.fds'])
     """
     if not data:
         return [], [], []
-    messages = re.findall(r"\w\d{3}", data)
+    messages = re.findall(r"\w\d{4}", data)
     checkers = [i for i in data.split(',') if re.match(r"^([a-zA-Z]+)$", i)]
     categories = re.findall(r"\w+\.\w+", data)
     return messages, checkers, categories
