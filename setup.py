@@ -41,6 +41,8 @@ setup(name='slidelint',
       zip_safe=False,
       install_requires=[
           'setuptools',
+          'docopt',
+          'configparser',
           # -*- Extra requirements: -*-
       ],
       entry_points="""

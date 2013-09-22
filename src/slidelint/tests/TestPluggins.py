@@ -20,8 +20,7 @@ ALL_ENTRIES = [
     _('checkerf', 'CategoryC', Loadable('CategoryC.checkerf')),  # 5--++
     _('checkerg', 'CategoryD', Loadable('CategoryD.checkerg'))]  # 6+++-
 
-# categories=[], checkers=[],
-#                       disabled_categories=[], disabled_checkers=[]
+
 class TestSequenceFunctions(unittest.TestCase):
 
     def setUp(self):
