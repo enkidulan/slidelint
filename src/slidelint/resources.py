@@ -1,15 +1,37 @@
 import pkg_resources
+from collections import namedtuple
 
-def load_checker(group, name):
-    """ loading checker(entry point) from category(group) from pkg_resources
-    returns only first found item
-    """
-    return [entrypoint.load() for entrypoint in
-            pkg_resources.iter_entry_points(group, name)][0]
+Checker = namedtuple('Checker', ['name', 'category', 'entry_point'])
 
 
-def belongs2category(category, checkers):
-    """ Takes category(pkg_resources entry_point group) and list of
-    checkers(entry_points names). Returns checkers that belong to category"""
-    return [checker for checker in checkers
-            if [i for i in pkg_resources.iter_entry_points(category, checker)]]
+class PlugginsHandler():
+    """Loads all entry points from pkg_resources that belongs to the group,
+    by default - slidelint.pluggins"""
+
+    def __init__(self, group="slidelint.pluggins"):
+        """Construct list of all entry_points belongs to the group
+        """
+        checkers = []
+        for dist in pkg_resources.working_set:
+            entries = dist.get_entry_map(group)
+            for full_name, entrie in entries.items():
+                category, name = full_name.split(".")
+                checkers.append(Checker(name, category, entrie))
+        self.checkers = checkers
+
+    def load_checkers(self, categories=['AllCategories'], checkers=[],
+                      disabled_categories=[], disabled_checkers=[]):
+        """
+        Return list of Checker namedtuple objects ('name', 'category', 'entry_point')
+        If no args passed return all checkers.
+        """
+        checkers_for_loading = self.checkers if categories[0] == "AllCategories" else \
+            [c for c in self.checkers if c.category in categories]
+        if disabled_categories:
+            checkers_for_loading = [] if disabled_categories[0] == "AllCategories" else \
+                [c for c in checkers_for_loading if c.category not in disabled_categories]
+        if checkers:
+            checkers_for_loading += [c for c in self.checkers if c.name in checkers and c not in checkers_for_loading]
+        if disabled_checkers:
+            checkers_for_loading = [c for c in checkers_for_loading if c.name not in disabled_checkers]
+        return checkers_for_loading
