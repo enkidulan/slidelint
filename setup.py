@@ -1,44 +1,60 @@
 from setuptools import setup, find_packages
-import sys, os
+import os
 
-version = '0.1dev'
+version = '1.0dev'
+
+long_description = (
+    open('README.rst').read()
+    + '\n' +
+    'Contributors\n'
+    '============\n'
+    + '\n' +
+    open('CONTRIBUTORS.txt').read()
+    + '\n' +
+    open('CHANGES.txt').read()
+    + '\n')
 
 setup(name='slidelint',
       version=version,
-      description="Reads in PDF of presentation slides and checks common problems, outputs a summary report on the problems.",
-      long_description="""\
-""",
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      description="",
+      long_description=long_description,
+      # Get more strings from
+      # http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[
+        "Programming Language :: Python",
+        ],
       keywords='',
       author='',
-      author_email='supamaxy@gmail.com',
+      author_email='',
       url='',
-      license='',
-      packages=find_packages('src', exclude=['ez_setup', 'examples', 'tests']),
-      package_dir={'': 'src'},
+      license='gpl',
+      packages=find_packages('src'),
+      package_dir = {'': 'src'},
+      # namespace_packages=['slidelint'],
+      extras_require={
+          'tests': ['testfixtures',
+                    'nose',
+                    'nose-selecttests',
+                    'coverage']
+      },
       include_package_data=True,
       zip_safe=False,
       install_requires=[
           'setuptools',
-          'docopt',
-          'configparser',
           # -*- Extra requirements: -*-
       ],
-      extras_require= {
-          'tests': ['testfixtures', ]
-      },
       entry_points="""
+      # -*- Entry points: -*-
       [console_scripts]
       slidelint = slidelint.pipeline_runner:main
-      [slidelint.text]
-      contents = slidelint.pipes.contents:main
-      text_contrast = slidelint.pipes.text_contrast:main
-      text_size = slidelint.pipes.text_size:main
-      edges = slidelint.pipes.edges:main
-      text_outline = slidelint.pipes.text_outline:main
-      [slidelint.content_quality]
-      grammar = slidelint.pipes.grammar:main
-      gender_pronouns = slidelint.pipes.gender_pronouns:main
-      # -*- Entry points: -*-
+
+      [slidelint.pluggins]
+      Text.contents = slidelint.pipes.contents:main
+      Text.contrast = slidelint.pipes.text_contrast:main
+      Text.size = slidelint.pipes.text_size:main
+      Text.edges = slidelint.pipes.edges:main
+      Text.outline = slidelint.pipes.text_outline:main
+      ContentQuality.grammar = slidelint.pipes.grammar:main
+      ContentQuality.gender_pronouns = slidelint.pipes.gender_pronouns:main
       """,
       )
