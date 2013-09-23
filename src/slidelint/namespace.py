@@ -5,6 +5,24 @@ checker = re.compile(r"^[a-z][a-z_]+[a-z]$")
 category = re.compile(r"^[A-Z][a-zA-Z]+$")
 
 
+def valid_category_id(name):
+    if not category.match(name):
+        raise NameError("Id '%s' is not allowed for category" % name)
+    return name
+
+
+def valid_checker_id(name):
+    if not checker.match(name):
+        raise NameError("Id '%s' is not allowed for checker" % name)
+    return name
+
+
+def valid_message_id(name):
+    if not message.match(name):
+        raise NameError("Id '%s' is not allowed for message" % name)
+    return name
+
+
 def clasify(data):
     """Data is string with ids, separated by ',', it returns:
         ([messages_id, ...], [ckeckers_id, ...], [categories_id, ...])
