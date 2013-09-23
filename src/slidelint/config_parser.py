@@ -38,8 +38,12 @@ class LintConfig():
     def handle_categories(self):
         rez_cat = []
         for category in self.categories:
+            if category in self.disable_categories:
+                continue
             if category in self.config:
                 name = namespace.valid_category_id(self.config[category]['category'])
+                if name in self.disable_categories:
+                    continue
                 rez = enables_disables(self.config[category])
                 # category defined as section but has no configuration so take
                 # its name only
@@ -66,7 +70,7 @@ class LintConfig():
         rez_chkr = []
         for checker in self.checkers:
             if checker in self.config:
-                kwargs = copy.copy(self.config[checker])
+                kwargs = dict(self.config[checker].items())
                 name = namespace.valid_checker_id(kwargs.pop('checker'))
                 rez_chkr.append((name, kwargs))
             else:
@@ -92,8 +96,8 @@ class LintConfig():
             self.messages, self.disable_messages = enables_disables(self.config['MESSAGES'])
         map(namespace.valid_message_id, self.messages)
         map(namespace.valid_message_id, self.disable_messages)
-        self.handle_categories()
-        self.handle_disable_categories()
+        self.handle_disable_categories()  # should be before handle_categories
+        self.handle_categories()  # should be after handle_disable_categories
         self.handle_checkers()
         self.handle_disable_checkers()
 

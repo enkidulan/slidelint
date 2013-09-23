@@ -59,13 +59,8 @@ class TestSequenceFunctions(unittest.TestCase):
                  ('checker_d', {}),
                  ('checker_e', {'arg1': '10', 'arg2': '20'})])
         compare(config.disable_checkers,
-                ['checker_a', 'checker_f'])
+                ['checker_f', 'checker_a'])
         compare(config.messages,
                 ['W0100'])
         compare(config.disable_messages,
                 ['W0110'])
-
-
-if __name__ == '__main__':
-    unittest.main()
-
