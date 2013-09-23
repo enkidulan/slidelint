@@ -1,7 +1,8 @@
 import pkg_resources
 from collections import namedtuple
 
-Checker = namedtuple('Checker', ['name', 'category', 'entry_point'])
+EntryPoint = namedtuple('EntryPoint', ['name', 'category', 'entry_point'])
+Checker = namedtuple('Checker', ['name', 'category', 'check'])
 
 
 class PlugginsHandler():
@@ -16,22 +17,23 @@ class PlugginsHandler():
             entries = dist.get_entry_map(group)
             for full_name, entrie in entries.items():
                 category, name = full_name.split(".")
-                checkers.append(Checker(name, category, entrie))
+                checkers.append(EntryPoint(name, category, entrie))
         self.checkers = checkers
 
     def load_checkers(self, categories=['AllCategories'], checkers=[],
                       disabled_categories=[], disabled_checkers=[]):
         """
-        Return list of Checker namedtuple objects ('name', 'category', 'entry_point')
+        Return list of Checker namedtuple objects:
+            [Checker('name', 'category', 'check'), ...]
         If no args passed return all checkers.
         """
-        checkers_for_loading = self.checkers if categories[0] == "AllCategories" else \
+        checkers_for_loading = self.checkers if "AllCategories" in categories else \
             [c for c in self.checkers if c.category in categories]
         if disabled_categories:
-            checkers_for_loading = [] if disabled_categories[0] == "AllCategories" else \
+            checkers_for_loading = [] if "AllCategories" in disabled_categories else \
                 [c for c in checkers_for_loading if c.category not in disabled_categories]
         if checkers:
             checkers_for_loading += [c for c in self.checkers if c.name in checkers and c not in checkers_for_loading]
         if disabled_checkers:
             checkers_for_loading = [c for c in checkers_for_loading if c.name not in disabled_checkers]
-        return checkers_for_loading
+        return [Checker(p.name, p.category, p.entry_point.load()) for p in checkers_for_loading]

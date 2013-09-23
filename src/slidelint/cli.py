@@ -22,48 +22,48 @@ Options:
                                           identifier separated by comma (,) or put this option multiple time.
 """
 from docopt import docopt
-import configparser
-import os.path
-import pkg_resources
+from slidelint.resources import PlugginsHandler
+from slidelint.config_parser import LintConfig
+from slidelint.outputs import OutputHandler
+
 import logging
 logger = logging.getLogger(__name__)
 
-docoptself
 
-def read_config(path):
-    """ configparser reader """
-    parser = configparser.ConfigParser()
-    default_config = os.path.join(os.path.dirname(os.path.abspath(__file__)),                                  'default.cfg')
-    if not path:
-        logger.info("No config file found, using default configuration")
-    parser.read(path or default_config)
-    return parser
+def lint(target_file, config_file, output, enable_disable_ids, msg_info):
+    pluggins = PlugginsHandler()
+    if msg_info:
+        rezult = [p.check(msg_info=msg_info) for p in pluggins.load_checkers()]
+        msg_ids = []
+    else:
+        config = LintConfig(config_file)
+        config.compose(*enable_disable_ids)
+        msg_ids = config.disable_messages  # mute messaging from appearing in report
+        checkers = pluggins.load_checkers(
+            categories=config.categories,
+            checkers=config.checkers_isd,
+            disabled_categories=config.disabled_categories,
+            disabled_checkers=config.disabled_checkers
+        )
+        rezult = []
+        for checker in checkers:
+            kwargs = {'target_file': target_file}
+            kwargs.update(config.get_checker_args(checker.name))
+            rezult.append(checker.check(kwargs))
+    return OutputHandler(rezult, msg_ids, output['format'], output['files_output'], output['ids'])
 
-def load_pipes(group='slidelint.pipes'):
-    return [entrypoint.load() for entrypoint in
-            pkg_resources.iter_entry_points(group=group)]
 
-
-def make_pipeline(config, to_enable, to_disable):
-    pipes = load_pipes()
-    print pipes
-
-def main():
-    """ config reader and pipeline runner
-{'--config': None,
- '--disable': None,
- '--enable': None,
- '--files-output': False,
- '--help': False,
- '--include-ids': False,
- '--output-format': 'text',
- '--version': False,
- '<msg_id>': [],
- 'FILE': 'sample.pdf',
- 'help-msg': False}
-
+def cli():
+    """
+    User command line interface handler function
     """
     args = docopt(__doc__)
-    config = read_config(args['--config'])
-    pipeline = make_pipeline(config, args['--enable'], args['--disable'])
-    print arg
+    target_file = args['FILE']
+    config_file = args['--config']
+    output = {'format': args['--output-format'],
+              'files_output': args['--files-output'],
+              'ids': args['--include-ids']
+              }
+    enable_disable_ids = (args['--enable'], args['--disable'])
+    msg_info = "All" or args['<msg_id>'] if args['help-msg'] else False
+    lint(target_file, config_file, output, enable_disable_ids, msg_info)

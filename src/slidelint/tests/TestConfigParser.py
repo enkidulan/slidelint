@@ -69,3 +69,5 @@ class TestSequenceFunctions(unittest.TestCase):
                 ['W0100'])
         compare(config.disable_messages,
                 ['W0110'])
+
+# TODO: tests for LintConfig.compose

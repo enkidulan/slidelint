@@ -1,8 +1,6 @@
 import os.path
 from configparser import ConfigParser
 from slidelint import namespace
-import copy
-# from collections import namedtuple
 
 import logging
 logger = logging.getLogger(__name__)
@@ -17,8 +15,9 @@ def enables_disables(entry):
 
 
 class LintConfig():
-    """ Reads config from given file(or default file) and parse it.
-    Also composes the formed list of checkers with given enable/disable ids.
+    """Reads config from given file(or default file) and parse it.
+    Also extend self enable/disable lists with given(as comma separated string
+    - command line option) enable/disable ids
     """
     def __init__(self, configfile_path=""):
         path = configfile_path and os.path.isfile(configfile_path) and configfile_path
@@ -30,12 +29,17 @@ class LintConfig():
         self.categories = []
         self.disable_categories = []
         self.checkers = []
+        self.checkers_isd = []
         self.disable_checkers = []
         self.messages = []
         self.disable_messages = []
+        self.checker_args_cache = None
         self.parse_config()
 
     def handle_categories(self):
+        """
+        Handling loading of categories and theirs entries to enable lists
+        """
         rez_cat = []
         for category in self.categories:
             if category in self.disable_categories:
@@ -67,6 +71,9 @@ class LintConfig():
         self.disable_categories = rez_cat
 
     def handle_checkers(self):
+        """
+        Handling loading of checkers and theirs args to enable lists
+        """
         rez_chkr = []
         for checker in self.checkers:
             if checker in self.config:
@@ -86,7 +93,8 @@ class LintConfig():
 
     def parse_config(self):
         """
-        transform config including list
+        Transform config file into Pluggins acceptable list of enables and
+        disables.
         """
         if 'CATEGORIES' in self.config:
             self.categories, self.disable_categories = enables_disables(self.config['CATEGORIES'])
@@ -100,17 +108,23 @@ class LintConfig():
         self.handle_categories()  # should be after handle_disable_categories
         self.handle_checkers()
         self.handle_disable_checkers()
+        self.checkers_isd = [i[0] for i in self.checkers]
 
     def compose(self, enables, disables):
         """
-        Return special mgs_ids for enabling/disabling and list of checkers with args
-            (mgs_ids:{'enable':(...), 'disable':()}, [(checker_name, args), ...])
+        Extends config file configuration with additional parameters
         """
         messages, checkers, categories = namespace.clasify(enables)
         self.categories += categories
-        self.checkers += checkers
+        self.checkers += [(i, {}) for i in checkers]
         self.messages += messages
-        messages, checkers, categories = namespace.clasify(enables)
+        messages, checkers, categories = namespace.clasify(disables)
         self.disable_categories += categories
         self.disable_checkers += checkers
         self.disable_messages += messages
+        self.checkers_isd = [i[0] for i in self.checkers]
+
+    def get_checker_args(self, name):
+        if not self.checker_args_cache:
+            self.checker_args_cache = dict(self.checkers)
+        return self.checker_args_cache.get(name, {})
