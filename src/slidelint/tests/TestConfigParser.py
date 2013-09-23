@@ -1,6 +1,6 @@
 import os.path
 import unittest
-from testfixtures import compare
+from testfixtures import compare, LogCapture
 
 from slidelint import config_parser
 
@@ -19,9 +19,14 @@ class TestSequenceFunctions(unittest.TestCase):
                  (['1', '2'], ['3', '4']))
 
     def test_default_config(self):
-        pass
+        with LogCapture() as l:
+            config_parser.LintConfig()
+            l.check(('slidelint.config_parser',
+                     'WARNING',
+                     'No config file found, using default configuration'),)
 
     def test_dummy_config(self):
+
         path = os.path.join(here, 'files', 'configurations', 'simple_enabling_disabling.cfg')
         config = config_parser.LintConfig(path)
         compare(config.categories,
