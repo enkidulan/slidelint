@@ -16,7 +16,7 @@ long_description = (
 
 setup(name='slidelint',
       version=version,
-      description="",
+      description="Reads in PDF of presentation slides and checks common problems, outputs a summary report on the problems.",
       long_description=long_description,
       # Get more strings from
       # http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -27,7 +27,7 @@ setup(name='slidelint',
       author='',
       author_email='',
       url='',
-      license='gpl',
+      license='apache2.0 (http://www.apache.org/licenses/LICENSE-2.0)',
       packages=find_packages('src'),
       package_dir = {'': 'src'},
       # namespace_packages=['slidelint'],
@@ -48,7 +48,7 @@ setup(name='slidelint',
       entry_points="""
       # -*- Entry points: -*-
       [console_scripts]
-      slidelint = slidelint.pipeline_runner:main
+      slidelint = slidelint.cli:cli
 
       [slidelint.pluggins]
       Text.contents = slidelint.pipes.contents:main
