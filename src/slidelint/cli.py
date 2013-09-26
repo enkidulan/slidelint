@@ -21,10 +21,11 @@ Options:
   -d <msg_ids> --disable=<msg_ids>  Enable the message, report, category or checker with the given id(s). You can either give multiple
                                           identifier separated by comma (,) or put this option multiple time.
 """
+import os
 from docopt import docopt
 from slidelint.resources import PlugginsHandler
 from slidelint.config_parser import LintConfig
-from slidelint.outputs import OutputHandler
+from slidelint.outputs import output_handler
 
 import logging
 logger = logging.getLogger(__name__)
@@ -49,8 +50,8 @@ def lint(target_file, config_file, output, enable_disable_ids, msg_info):
         for checker in checkers:
             kwargs = {'target_file': target_file}
             kwargs.update(config.get_checker_args(checker.name))
-            rezult.append(checker.check(kwargs))
-    return OutputHandler(rezult, msg_ids, output['format'], output['files_output'], output['ids'])
+            rezult += checker.check(kwargs)
+    return output_handler(target_file, rezult, msg_ids, output['format'], output['files_output'], output['ids'])
 
 
 def cli():

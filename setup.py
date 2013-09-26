@@ -43,6 +43,7 @@ setup(name='slidelint',
           'setuptools',
           'docopt',
           'configparser',
+          'colorama',
           # -*- Extra requirements: -*-
       ],
       entry_points="""
