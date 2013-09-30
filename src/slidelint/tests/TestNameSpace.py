@@ -12,11 +12,11 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_checker_re(self):
         self.assertIsNotNone(namespace.checker.match("validname"))
-        self.assertIsNotNone(namespace.checker.match("valid_name"))
+        self.assertIsNotNone(namespace.checker.match("valid_name_1"))
         self.assertIsNone(namespace.checker.match("Invalidname"))
         self.assertIsNone(namespace.checker.match("_invalidname"))
         self.assertIsNone(namespace.checker.match("invalidname_"))
-        self.assertIsNone(namespace.checker.match("invalidname3"))
+        self.assertIsNone(namespace.checker.match("3invalidname"))
 
     def test_categoty_re(self):
         self.assertIsNotNone(namespace.category.match("ValidName"))
