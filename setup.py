@@ -44,6 +44,8 @@ setup(name='slidelint',
           'docopt',
           'configparser',
           'colorama',
+          'pdfminer',
+          'nltk'
           # -*- Extra requirements: -*-
       ],
       entry_points="""
@@ -52,12 +54,11 @@ setup(name='slidelint',
       slidelint = slidelint.cli:cli
 
       [slidelint.pluggins]
-      Text.contents = slidelint.pipes.contents:main
-      Text.contrast = slidelint.pipes.text_contrast:main
-      Text.size = slidelint.pipes.text_size:main
-      Text.edges = slidelint.pipes.edges:main
-      Text.outline = slidelint.pipes.text_outline:main
-      ContentQuality.grammar = slidelint.pipes.grammar:main
-      ContentQuality.gender_pronouns = slidelint.pipes.gender_pronouns:main
+      Text.contents = slidelint.checkers.contents:main
+
+      [slidelint.tests]
+      TestGroupOne.test_cheker_1 = slidelint.tests.files.test_modules:group1_cheker1
+      TestGroupOne.test_cheker_2 = slidelint.tests.files.test_modules:group1_cheker2
+      TestGroupTwo.test_cheker_3 = slidelint.tests.files.test_modules:group2_cheker1
       """,
       )

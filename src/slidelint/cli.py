@@ -31,10 +31,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def lint(target_file, config_file, output, enable_disable_ids, msg_info):
-    pluggins = PlugginsHandler()
+def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="slidelint.pluggins"):
+    pluggins = PlugginsHandler(group=group)
     if msg_info:
-        rezult = [p.check(msg_info=msg_info) for p in pluggins.load_checkers()]
+        rezult = []
+        for checker in pluggins.load_checkers():
+            rezult += list(checker.check(msg_info=msg_info))
         msg_ids = []
     else:
         config = LintConfig(config_file)
@@ -43,15 +45,16 @@ def lint(target_file, config_file, output, enable_disable_ids, msg_info):
         checkers = pluggins.load_checkers(
             categories=config.categories,
             checkers=config.checkers_isd,
-            disabled_categories=config.disabled_categories,
-            disabled_checkers=config.disabled_checkers
+            disabled_categories=config.disable_categories,
+            disabled_checkers=config.disable_checkers
         )
         rezult = []
         for checker in checkers:
             kwargs = {'target_file': target_file}
             kwargs.update(config.get_checker_args(checker.name))
-            rezult += checker.check(kwargs)
-    return output_handler(target_file, rezult, msg_ids, output['format'], output['files_output'], output['ids'])
+            rezult += checker.check(**kwargs)
+    return output_handler(target_file, rezult, msg_ids, output['format'],
+                          output['files_output'], output['ids'])
 
 
 def cli():
