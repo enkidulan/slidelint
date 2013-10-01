@@ -35,7 +35,3 @@ class TestLinterRunner(unittest.TestCase):
         target_file = os.path.join(here, 'files', 'pdfs', 'simple_text_presentation.pdf')
         rez = contents.main(target_file=target_file)
         compare(rez, [])
-
-
-if __name__ == '__main__':
-    unittest.main()
