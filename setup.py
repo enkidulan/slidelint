@@ -55,6 +55,7 @@ setup(name='slidelint',
 
       [slidelint.pluggins]
       Text.contents = slidelint.checkers.contents:main
+      Text.fontsize = slidelint.checkers.fontsize:main
 
       [slidelint.tests]
       TestGroupOne.test_cheker_1 = slidelint.tests.files.test_modules:group1_cheker1

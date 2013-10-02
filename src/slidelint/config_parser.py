@@ -20,7 +20,7 @@ class LintConfig():
     - command line option) enable/disable ids
     """
     def __init__(self, configfile_path=""):
-        path = os.path.isfile(configfile_path) and configfile_path
+        path = configfile_path and os.path.isfile(configfile_path) and configfile_path
         if not path:
             logger.warn("No config file found, using default configuration")
             path = os.path.join(here, 'default.cfg')

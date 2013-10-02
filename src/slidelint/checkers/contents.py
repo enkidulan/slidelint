@@ -21,7 +21,12 @@ def main(target_file=None, msg_info=None):
             m['msg'] = m['help']
         return rez
     text = convert_pdf(target_file)
-    rez = [] if re.findall('\w+', text) else list(messages)
+    rez = []
+    if not re.findall('\w+', text):
+        for m in messages:
+            page_status = {'page': ''}
+            page_status.update(m)
+            rez.append(page_status)
     return rez
 
 
