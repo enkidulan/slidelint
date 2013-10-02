@@ -1,5 +1,6 @@
 ---
 install:
+- pip install setuptools --upgrade
 - python bootstrap.py
 - bin/buildout -N -q -t 10
 python:
