@@ -1,9 +1,6 @@
-from pdfminer.pdfinterp import PDFResourceManager, process_pdf
-from pdfminer.converter import TextConverter
-from pdfminer.layout import LAParams
-from cStringIO import StringIO
-
 import re
+from slidelint.utils import help
+from slidelint.pdf_utils import convert_pdf_to_text
 
 
 messages = (
@@ -15,12 +12,8 @@ messages = (
 
 def main(target_file=None, msg_info=None):
     if msg_info:
-        rez = list(messages) if msg_info == 'All' else [m for m in messages if m['id'] in msg_info]
-        for m in rez:
-            m['page'] = ""
-            m['msg'] = m['help']
-        return rez
-    text = convert_pdf(target_file)
+        return help(messages, msg_info)
+    text = convert_pdf_to_text(target_file)
     rez = []
     if not re.findall('\w+', text):
         for m in messages:
@@ -28,18 +21,3 @@ def main(target_file=None, msg_info=None):
             page_status.update(m)
             rez.append(page_status)
     return rez
-
-
-def convert_pdf(path):
-    rsrcmgr = PDFResourceManager()
-    retstr = StringIO()
-    codec = 'utf-8'
-    laparams = LAParams()
-    device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-    fp = open(path, 'rb')
-    process_pdf(rsrcmgr, device, fp)
-    fp.close()
-    device.close()
-    str = retstr.getvalue()
-    retstr.close()
-    return str

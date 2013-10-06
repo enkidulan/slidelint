@@ -1,7 +1,5 @@
-from pdfminer.pdfparser import PDFParser, PDFDocument
-from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
-from pdfminer.converter import PDFPageAggregator
-from pdfminer.layout import LAParams, LTChar, LTTextLine, LTTextBox
+from slidelint.utils import help
+from slidelint.pdf_utils import document_pages_layouts, layout_characters
 
 messages = (
     dict(id='C1003',
@@ -10,27 +8,23 @@ messages = (
          help="Too close to edges: Text should not appear close to the edges."),)
 
 
-def main(target_file=None, msg_info=None):
+def main(target_file=None, msg_info=None, min_page_ratio='12'):
     if msg_info:
-        rez = list(messages) if msg_info == 'All' else [m for m in messages if m['id'] in msg_info]
-        for m in rez:
-            m['page'] = ""
-            m['msg'] = m['help']
-        return rez
-    rez = check_edges_danger_zone(target_file)
+        return help(messages, msg_info)
+    rez = check_edges_danger_zone(target_file, min_page_ratio)
     return rez
 
 
-def check_edges_danger_zone(path):
+def check_edges_danger_zone(path, min_page_ratio=12):
     """ Looking through all page layouts for text and comparing it size
     to page size
     """
     # return []
     rez = []
-    dist = 12
+    min_page_ratio = float(min_page_ratio)
     for page_num, page_layout in document_pages_layouts(path):
-        width_dist = page_layout.width / dist
-        height_dist = page_layout.height / dist
+        width_dist = page_layout.width / min_page_ratio
+        height_dist = page_layout.height / min_page_ratio
         save_zone = (
             width_dist,
             height_dist,
@@ -49,33 +43,3 @@ def check_edges_danger_zone(path):
                 rez.append(msg)
                 break
     return rez
-
-
-def layout_characters(layout):
-    for item in layout:
-        if isinstance(item, LTChar):
-            yield item
-        if isinstance(item, LTTextLine):
-            for i in layout_characters(item):
-                yield i
-        if isinstance(item, LTTextBox):
-            for i in layout_characters(item):
-                yield i
-
-
-def document_pages_layouts(path):
-    """ Basically read pdf document and parce it,
-    yield page number and page layout
-    """
-    fp = open(path, 'rb')
-    parser = PDFParser(fp)
-    doc = PDFDocument()
-    parser.set_document(doc)
-    doc.set_parser(parser)
-    rsrcmgr = PDFResourceManager()
-    laparams = LAParams()
-    device = PDFPageAggregator(rsrcmgr, laparams=laparams)
-    interpreter = PDFPageInterpreter(rsrcmgr, device)
-    for n, page in enumerate(doc.get_pages()):
-        interpreter.process_page(page)
-        yield n, device.get_result()
