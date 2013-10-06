@@ -26,7 +26,8 @@ class TestEdgesDangerZoneChecker(unittest.TestCase):
                 [])
 
     def test_text_is_to_close_to_edges(self):
-        target_file = os.path.join(here, 'files', 'pdfs', 'edges_danger_zone.pdf')
+      for prefix in ('GD', 'LO'):
+        target_file = os.path.join(here, 'files', 'pdfs', prefix+'_edges_danger_zone.pdf')
         rez = edges_danger_zone.main(target_file=target_file)
         compare(rez,
                 [dict(id='C1003', msg_name='too-close-to-edges',
@@ -47,7 +48,8 @@ class TestEdgesDangerZoneChecker(unittest.TestCase):
                       page='4')])
 
     def test_text_if_not_near_edges(self):
-        target_file = os.path.join(here, 'files', 'pdfs', 'simple_text_presentation.pdf')
+      for prefix in ('GD', 'LO'):
+        target_file = os.path.join(here, 'files', 'pdfs', prefix+'_simple_text_presentation.pdf')
         rez = edges_danger_zone.main(target_file=target_file)
         compare(rez, [])
 
