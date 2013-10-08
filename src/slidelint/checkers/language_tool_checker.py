@@ -5,10 +5,14 @@ import subprocess
 from lxml import etree
 import urllib2
 import urllib
+import time
+import nltk
 
-lt_path = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-    'LanguageTool')
+package_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+lt_path = os.path.join(package_root, 'LanguageTool')
+english_pickle = os.path.join(package_root, 'punkt/english.pickle')
+
+tokenizer = nltk.data.load('file:' + english_pickle)
 
 
 class LanguagetoolServer():
@@ -23,6 +27,7 @@ class LanguagetoolServer():
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True,)
+        time.sleep(0.2)
 
     def grammar_checker(self, text, language="en-US"):
         url = 'http://127.0.0.1:%s' % self.port
@@ -36,7 +41,7 @@ class LanguagetoolServer():
         return self.grammar_checker
 
     def __exit__(self, type, value, traceback):
-        self.process.kill()
+        self.process.terminate()
 
 
 messages = (
@@ -49,16 +54,18 @@ messages = (
 def main(target_file=None, msg_info=None):
     if msg_info:
         return help(messages, msg_info)
-    pages = convert_pdf_to_text(target_file).replace('\n\n', ' ').split('\x0c')
+    pages = convert_pdf_to_text(target_file).split('\x0c')
     rez = []
     with LanguagetoolServer(lt_path) as grammar_checker:
         for num, page in enumerate(pages):
-            for error in grammar_checker(page):
-                rez.append({
-                    'id': 'C1010',
-                    'page': num,
-                    'msg_name': 'language-tool-%s' % error.get('ruleId'),
-                    'msg': '%s - %s' % (error.get('locqualityissuetype'),
-                                            error.get('msg')),
-                    'help': error.get('context')})
+            # sent = " ".join([i.replace('\n', '') for i in tokenizer.tokenize(page)])
+            for sent in tokenizer.tokenize(page):
+                for error in grammar_checker(sent.replace('\n', '')):
+                    rez.append({
+                        'id': 'C1010',
+                        'page': '%s' % (num + 1),
+                        'msg_name': 'language-tool-%s' % error.get('ruleId'),
+                        'msg': '%s - %s' % (error.get('locqualityissuetype'),
+                                                error.get('msg')),
+                        'help': error.get('context')})
     return rez
