@@ -48,7 +48,7 @@ def data_loader(command_subclass):
             download_ziped_resource,
             (base_path,
              'http://nltk.github.com/nltk_data/packages/tokenizers/punkt.zip',
-             'punkt.zip',
+             'punkt',
              True),
             msg="Downloading punkt nltk data")
 
