@@ -5,7 +5,7 @@ import subprocess
 from lxml import etree
 import urllib2
 import urllib
-import time
+import socket
 import nltk
 
 package_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -15,19 +15,30 @@ english_pickle = os.path.join(package_root, 'punkt/english.pickle')
 tokenizer = nltk.data.load('file:' + english_pickle)
 
 
+def get_free_port():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    sock.bind(('', 0))
+    sock.listen(socket.SOMAXCONN)
+    ipaddr, port = sock.getsockname()
+    sock.close()
+    return str(port)
+
+
 class LanguagetoolServer():
 
-    def __init__(self, path, port='8081'):
+    def __init__(self, path, port=None):
+        self.port = port or get_free_port()
         cmd = ['java', '-cp', os.path.join(path, 'languagetool-server.jar'),
-               'org.languagetool.server.HTTPServer', '--port', port]
-        self.port = port
+               'org.languagetool.server.HTTPServer', '--port', self.port]
         self.process = subprocess.Popen(
             cmd,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True,)
-        time.sleep(0.2)
+        while 'Server started' not in self.process.stdout.readline():
+            # waiting for server start
+            pass
 
     def grammar_checker(self, text, language="en-US"):
         url = 'http://127.0.0.1:%s' % self.port
@@ -41,7 +52,7 @@ class LanguagetoolServer():
         return self.grammar_checker
 
     def __exit__(self, type, value, traceback):
-        self.process.terminate()
+        self.process.kill()
 
 
 messages = (
