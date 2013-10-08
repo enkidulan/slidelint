@@ -1,5 +1,70 @@
 from setuptools import setup, find_packages
 import os
+import sys
+import zipfile
+import urllib2
+import shutil
+from tempfile import NamedTemporaryFile
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+from os.path import join
+
+here = os.path.dirname(os.path.abspath(__file__))
+
+
+def download_ziped_resource(path, url, name, unzip=False):
+    full_path = join(path, name)
+    if os.path.exists(full_path):
+        return
+    req = urllib2.urlopen(url)
+    data_destination = NamedTemporaryFile() if unzip else open(full_path, 'wb')
+    with data_destination as f:
+        shutil.copyfileobj(req, f)
+        if unzip:
+            f.file.seek(0)
+            zfile = zipfile.ZipFile(f.name)
+            zfile.extractall(path)
+            os.rename(os.path.join(path, zfile.namelist()[0]), full_path)
+
+
+def data_loader(command_subclass):
+    """A decorator for classes subclassing one of the setuptools commands.
+
+    It modifies the run() method so that it prints a friendly greeting.
+    """
+    orig_run = command_subclass.run
+
+    def modified_run(self):
+        orig_run(self)
+        base_path = join(self.install_lib or join(here, 'src'), 'slidelint')
+        self.execute(
+            download_ziped_resource,
+            (base_path,
+             'http://www.languagetool.org/download/LanguageTool-stable.zip',
+             'LanguageTool',
+             True),
+            msg="Downloading LanguageTool")
+        self.execute(
+            download_ziped_resource,
+            (base_path,
+             'http://nltk.github.com/nltk_data/packages/tokenizers/punkt.zip',
+             'punkt.zip',
+             True),
+            msg="Downloading punkt nltk data")
+
+    command_subclass.run = modified_run
+    return command_subclass
+
+
+@data_loader
+class DevelopCommand(develop):
+    pass
+
+
+@data_loader
+class InstallCommand(install):
+    pass
+
 
 version = '1.0dev'
 
@@ -13,6 +78,7 @@ long_description = (
     + '\n' +
     open('CHANGES.txt').read()
     + '\n')
+
 
 setup(name='slidelint',
       version=version,
@@ -31,6 +97,8 @@ setup(name='slidelint',
       packages=find_packages('src'),
       package_dir = {'': 'src'},
       # namespace_packages=['slidelint'],
+      cmdclass={'install': InstallCommand,
+                'develop': DevelopCommand},
       extras_require={
           'tests': ['testfixtures',
                     'nose',
@@ -48,7 +116,7 @@ setup(name='slidelint',
           'lxml',
           # '3to2',
           # 'language_tool', # don't work with python2
-          # 'nltk', # not release for python3
+          'nltk', # not release for python3
           # -*- Extra requirements: -*-
       ],
       entry_points="""
@@ -68,26 +136,3 @@ setup(name='slidelint',
       TestGroupTwo.test_cheker_3 = slidelint.tests.files.test_modules:group2_cheker1
       """,
       )
-
-
-def dowload_language_tool():
-    import zipfile
-    import urllib2
-    import shutil
-    import tempfile
-    here = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'src', 'slidelint')
-    language_tool = os.path.join(here, 'LanguageTool')
-    if os.path.exists(language_tool):
-        # no need to load LanguageTool again
-        return
-    url = 'http://www.languagetool.org/download/LanguageTool-stable.zip'
-    req = urllib2.urlopen(url)
-    with tempfile.NamedTemporaryFile() as tf:
-        shutil.copyfileobj(req, tf)
-        tf.file.seek(0)
-        zfile = zipfile.ZipFile(tf.name)
-        zfile.extractall(here)
-        os.rename(os.path.join(here, zfile.namelist()[0]), language_tool)
-
-
-dowload_language_tool()
