@@ -33,14 +33,16 @@ logger = logging.getLogger(__name__)
 
 def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="slidelint.pluggins"):
     pluggins = PlugginsHandler(group=group)
+    config = LintConfig(config_file)
+    config.compose(*enable_disable_ids)
     if msg_info:
         rezult = []
         for checker in pluggins.load_checkers():
-            rezult += list(checker.check(msg_info=msg_info))
+            kwargs = {'msg_info': msg_info}
+            kwargs.update(config.get_checker_args(checker.name))
+            rezult += list(checker.check(**kwargs))
         msg_ids = []
     else:
-        config = LintConfig(config_file)
-        config.compose(*enable_disable_ids)
         msg_ids = config.disable_messages  # mute messaging from appearing in report
         checkers = pluggins.load_checkers(
             categories=config.categories,
