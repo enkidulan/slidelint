@@ -1,7 +1,5 @@
-import re
 from slidelint.utils import help
 from slidelint.pdf_utils import convert_pdf_to_text
-
 
 messages = (
     dict(id='W1001',
@@ -15,7 +13,7 @@ def main(target_file=None, msg_info=None):
         return help(messages, msg_info)
     text = convert_pdf_to_text(target_file)
     rez = []
-    if not re.findall('\w+', text):
+    if not text:
         for m in messages:
             page_status = {'page': ''}
             page_status.update(m)

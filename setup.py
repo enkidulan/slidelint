@@ -44,13 +44,13 @@ def data_loader(command_subclass):
              'LanguageTool',
              True),
             msg="Downloading LanguageTool")
-        self.execute(
-            download_ziped_resource,
-            (base_path,
-             'http://nltk.github.com/nltk_data/packages/tokenizers/punkt.zip',
-             'punkt',
-             True),
-            msg="Downloading punkt nltk data")
+        # self.execute(
+        #     download_ziped_resource,
+        #     (base_path,
+        #      'http://nltk.github.com/nltk_data/packages/tokenizers/punkt.zip',
+        #      'punkt',
+        #      True),
+        #     msg="Downloading punkt nltk data")
 
     command_subclass.run = modified_run
     return command_subclass
@@ -116,7 +116,7 @@ setup(name='slidelint',
           'lxml',
           # '3to2',
           # 'language_tool', # don't work with python2
-          'nltk', # not release for python3
+          # 'nltk', # not release for python3
           # -*- Extra requirements: -*-
       ],
       entry_points="""
@@ -129,6 +129,7 @@ setup(name='slidelint',
       Text.fontsize = slidelint.checkers.fontsize:main
       Text.edges_danger_zone = slidelint.checkers.edges_danger_zone:main
       ContentQuality.language_tool_checker = slidelint.checkers.language_tool_checker:main
+      ContentQuality.regex_grammar_checker = slidelint.checkers.regex_grammar_checker:main
 
       [slidelint.tests]
       TestGroupOne.test_cheker_1 = slidelint.tests.files.test_modules:group1_cheker1

@@ -6,13 +6,13 @@ from lxml import etree
 import urllib2
 import urllib
 import socket
-import nltk
+# import nltk
 
 package_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 lt_path = os.path.join(package_root, 'LanguageTool')
 english_pickle = os.path.join(package_root, 'punkt/english.pickle')
 
-tokenizer = nltk.data.load('file:' + english_pickle)
+# tokenizer = nltk.data.load('file:' + english_pickle)
 
 
 def get_free_port():
@@ -65,13 +65,14 @@ messages = (
 def main(target_file=None, msg_info=None):
     if msg_info:
         return help(messages, msg_info)
-    pages = convert_pdf_to_text(target_file).split('\x0c')
+    pages = convert_pdf_to_text(target_file)
     rez = []
     with LanguagetoolServer(lt_path) as grammar_checker:
         for num, page in enumerate(pages):
-            # sent = " ".join([i.replace('\n', '') for i in tokenizer.tokenize(page)])
-            for sent in tokenizer.tokenize(page):
-                for error in grammar_checker(sent.replace('\n', '')):
+            for paragraph in page:
+                # fixing new-lines and spaces for languagetool
+                paragraph = paragraph.replace(' \n', ' ').replace('\n ', ' ').replace('\n', ' ')
+                for error in grammar_checker(paragraph):
                     rez.append({
                         'id': 'C1010',
                         'page': '%s' % (num + 1),

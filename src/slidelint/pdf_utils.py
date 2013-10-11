@@ -9,6 +9,12 @@ from pdfminer.converter import PDFPageAggregator, TextConverter
 from pdfminer.layout import LAParams, LTChar, LTTextLine, LTTextBox
 
 
+def split_to_sentences_per_pages(text):
+    def split_into_sentences(line):
+        return filter(None, (i.strip() for i in line.split('\n\n')))
+    return filter(None, map(split_into_sentences, text.split('\x0c')))
+
+
 def convert_pdf_to_text(path):
     rsrcmgr = PDFResourceManager()
     retstr = BytesIO()
@@ -19,9 +25,9 @@ def convert_pdf_to_text(path):
     process_pdf(rsrcmgr, device, fp)
     fp.close()
     device.close()
-    str = retstr.getvalue()
+    text = retstr.getvalue()
     retstr.close()
-    return str
+    return split_to_sentences_per_pages(text)
 
 
 def layout_characters(layout):
