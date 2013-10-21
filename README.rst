@@ -14,9 +14,17 @@ Installation
 ************
 
 **System requirements:**
+    * setuptools > 1.0
     * java-7 (for LanguageTool)
     * python-dev (python-develop)
-    * python-lxml (or libxml2-dev, libxslt-dev for ubuntu and libxml-devel, libxslt-devel for fedora)
+    * python-lxml
+    * zlib1g-dev
+
+
+
+:: 
+ 
+   $ sudo apt-get install openjdk-7-jre zlib1g-dev python-lxml python-dev poppler-utils poppler-data
 
 
 Use zc.buildout **to install this package**:
