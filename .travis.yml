@@ -1,6 +1,6 @@
 ---
 before_install:
- - sudo apt-get install -qq python-lxml poppler poppler-data
+ - sudo apt-get install -qq python-lxml poppler-utils
 install:
 - pip install setuptools --upgrade
 - python bootstrap.py
