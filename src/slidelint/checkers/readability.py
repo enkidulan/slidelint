@@ -2,7 +2,7 @@ from slidelint.utils import help
 import os
 import tempdir
 import subprocess
-from lxml import etree
+from lxml import html
 from slidelint.pdf_utils import document_pages_layouts, layout_characters
 from PIL import Image, ImageDraw
 import re
@@ -34,17 +34,17 @@ def tranform2html(source, dist, out_name='out.html'):
 
 
 class TextColorExtractor():
-    def __init__(self, html):
-        root = etree.fromstring(html)
-        body = root.find('{http://www.w3.org/1999/xhtml}body')
-        styles = [re.findall('\.(ft\w+)\{.*color:#([\w|\d]+).*\}', i.getchildren()[0].text)
-                  for i in body.findall("{http://www.w3.org/1999/xhtml}style")]
+    def __init__(self, raw_html):
+        root = html.fromstring(raw_html)
+        body = root.find('body')
+        styles = [re.findall('\.(ft\w+)\{.*color:#([\w|\d]+).*\}', i.text)
+                  for i in body.findall("style")]
         self.class_color_mapping = dict(sum(styles, []))
-        self.pages = [page for page in body.findall('{http://www.w3.org/1999/xhtml}div')]
+        self.pages = [page for page in body.findall('div')]
 
     def __call__(self, page_num):
         page = self.pages[page_num]
-        for paragraph in page.findall('{http://www.w3.org/1999/xhtml}p'):
+        for paragraph in page.findall('p'):
             color = self.class_color_mapping[paragraph.get('class', 'ft00')]
             for character in "".join(paragraph.itertext()):
                 if character not in (u'\xa0',) and ord(character ) > 32:
