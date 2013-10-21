@@ -113,7 +113,7 @@ setup(name='slidelint',
           'configparser',  # only for python2
           'colorama',
           'pdfminer',
-      #    'lxml',
+          'lxml',
           'tempdir',
           'pillow',
           # '3to2',
