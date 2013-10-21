@@ -1,6 +1,6 @@
 ---
 before_install:
- - sudo apt-get install -qq openjdk-7-jre zlib1g-dev python-lxml python-dev poppler-utils poppler-data
+ - sudo apt-get install -qq python-dev poppler-utils poppler-data
 install:
 - pip install setuptools --upgrade
 - python bootstrap.py
