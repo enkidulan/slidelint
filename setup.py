@@ -114,6 +114,8 @@ setup(name='slidelint',
           'colorama',
           'pdfminer',
           'lxml',
+          'tempdir',
+          'pillow',
           # '3to2',
           # 'language_tool', # don't work with python2
           # 'nltk', # not release for python3
