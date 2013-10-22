@@ -112,7 +112,7 @@ setup(name='slidelint',
           'docopt',
           'configparser',  # only for python2
           'colorama',
-          'pdfminer',
+          'pdfminer==20110515',
           'lxml',
           'tempdir',
           'pillow',
