@@ -3,10 +3,23 @@ import os
 import tempdir
 import subprocess
 from lxml import html
-from slidelint.pdf_utils import document_pages_layouts, layout_characters
+from slidelint.pdf_utils import document_pages_layouts
+from pdfminer.layout import LAParams, LTChar, LTTextLine, LTTextBox
 from PIL import Image, ImageDraw
 import re
 from math import exp
+
+
+def layout_characters(layout):
+    for item in layout:
+        if isinstance(item, LTChar):
+            if ord(item._text) > 32:
+                yield item
+        elif isinstance(item, LTTextLine):
+            yield [i for i in layout_characters(item)]
+        elif isinstance(item, LTTextBox):
+            for i in layout_characters(item):
+                yield i
 
 messages = (
     dict(id='C3000',
@@ -44,22 +57,34 @@ class TextColorExtractor():
 
     def __call__(self, page_num):
         page = self.pages[page_num]
+        colors = []
         for paragraph in page.findall('p'):
             color = self.class_color_mapping[paragraph.get('class', 'ft00')]
-            for character in "".join(paragraph.itertext()):
-                if character not in (u'\xa0',) and ord(character ) > 32:
-                    yield color, character
+            colors.append([(color, character) for character in "".join(paragraph.itertext())
+                   if character not in (u'\xa0',) and ord(character ) > 32])
+            #         # yield color, character
+        return {
+            'text': sum([[j[1] for j in i] for i in colors], []),
+            'colors': sum([[j[0] for j in i] for i in colors], [])
+        }
+
 
 
 def get_text_color_and_background(color_extractor, page_layout,
                                   page_background, page_num):
-    for character, color in zip(layout_characters(page_layout), color_extractor(page_num)):
-        if character._text != color[1]:
-            raise ValueError("Characters mismatch: '%s' != '%s'", character, color)
-        x0, y0, x1, y1 = map(int, character.bbox)
-        box = (x0, page_layout.height - y1, x1, page_layout.height - y0)
-        character_background = page_background.crop(box)
-        yield color[1], color[0], character_background
+    text_colors = color_extractor(page_num)
+    for characters in layout_characters(page_layout):
+        text_set = [i._text for i in characters]
+        first = ''.join(text_colors['text']).find(''.join(text_set))
+        last = first + len(text_set)
+        del text_colors['text'][0:10]
+        colors_set = text_colors['colors'][0:10]
+        del text_colors['colors'][0:10]
+        for character, color in zip(characters, colors_set):
+            x0, y0, x1, y1 = map(int, character.bbox)
+            box = (x0, page_layout.height - y1, x1, page_layout.height - y0)
+            character_background = page_background.crop(box)
+            yield character._text, color, character_background
 
 
 def goes_throught_pages(source):
@@ -87,10 +112,10 @@ def html_color_to_grayscale(colorstring):
 
 
 class VisibilityChecker():
-    def __init__(self, scale, s_range=50):
+    def __init__(self, scale=1, cross_range=50):
         self.scale = scale
-        self.range = s_range
-        self.cc = [exp(i/10.0) for i in range(1, self.range+1)]
+        self.cross_range = cross_range
+        self.cc = [exp(i/10.0) ** self.scale for i in range(1, self.cross_range+1)]
 
     def colors_slice_sum(self, colors_slice):
         return sum([d / k for k, d in zip(self.cc, colors_slice)])
@@ -98,8 +123,8 @@ class VisibilityChecker():
     def __call__(self, html_color, background):
         histogram = background.convert('L').histogram()
         grayscale_color = html_color_to_grayscale(html_color)
-        start = grayscale_color - self.range
-        end = grayscale_color + self.range
+        start = grayscale_color - self.cross_range
+        end = grayscale_color + self.cross_range
         total_colors = sum(histogram)
         left_colors_slice = histogram[start if start > 0 else 0:grayscale_color]
         right_colors_slice = histogram[grayscale_color + 1:end if end < 256 else None]
@@ -109,11 +134,12 @@ class VisibilityChecker():
         return similarity
 
 
-def main(target_file=None, msg_info=None):
+def main(target_file=None, msg_info=None, scale=1, max_similarity=0.1, cross_range=50):
     if msg_info:
         return help(messages, msg_info)
-    scale = 1
-    max_similarity = 0.1
+    scale = float(scale)
+    max_similarity = float(max_similarity)
+    cross_range = float(cross_range)
     rez = []
     visibility_checker = VisibilityChecker(scale)
     for page_num, page_data in goes_throught_pages(target_file):
@@ -122,7 +148,7 @@ def main(target_file=None, msg_info=None):
             if similarity > max_similarity:
                 rez.append(dict(id='C3000',
                                 msg_name='text-readability',
-                                msg='Text is not readable enough %s' % character,
+                                msg='Text is not readable enough',
                                 help="Change text or background color",
                                 page='%s' % (page_num + 1)))
                 break

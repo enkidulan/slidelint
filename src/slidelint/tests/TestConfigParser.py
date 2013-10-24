@@ -21,8 +21,8 @@ class TestSequenceFunctions(unittest.TestCase):
     def test_default_config(self):
         with LogCapture() as l:
             config_parser.LintConfig()
-            l.check(('slidelint.config_parser',
-                     'WARNING',
+            l.check(('user_messages',
+                     'INFO',
                      'No config file found, using default configuration'),)
 
     def test_dummy_config(self):

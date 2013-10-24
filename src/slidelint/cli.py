@@ -26,6 +26,8 @@ from docopt import docopt
 from slidelint.resources import PlugginsHandler
 from slidelint.config_parser import LintConfig
 from slidelint.outputs import output_handler
+import time
+from multiprocessing import Process
 
 import logging
 logger = logging.getLogger(__name__)
@@ -51,10 +53,22 @@ def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="
             disabled_checkers=config.disable_checkers
         )
         rezult = []
+        # pp = []
+        # for checker in checkers:
+        #     kwargs = {'target_file': target_file}
+        #     kwargs.update(config.get_checker_args(checker.name))
+        #     pp.append(Process(target=checker.check, kwargs=kwargs))
+        # for p in pp:
+        #   p.start()
+        # for p in pp:
+        #   p.join()
         for checker in checkers:
             kwargs = {'target_file': target_file}
+            # start = time.time()
             kwargs.update(config.get_checker_args(checker.name))
             rezult += checker.check(**kwargs)
+            # end = time.time()
+            # print "%s: %0.4f" % (checker.name, end - start)
     return output_handler(target_file, rezult, msg_ids, output['format'],
                           output['files_output'], output['ids'])
 

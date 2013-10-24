@@ -6,39 +6,58 @@ from lxml import etree
 import urllib2
 import urllib
 import socket
-# import nltk
+from appdirs import user_data_dir
+import requests
 
 package_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 lt_path = os.path.join(package_root, 'LanguageTool')
-english_pickle = os.path.join(package_root, 'punkt/english.pickle')
-
-# tokenizer = nltk.data.load('file:' + english_pickle)
 
 
-def get_free_port():
+def get_free_port(file_to_store):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
     sock.bind(('', 0))
     sock.listen(socket.SOMAXCONN)
     ipaddr, port = sock.getsockname()
     sock.close()
+    with open(file_to_store, 'wb') as f:
+        f.write(str(port))
     return str(port)
+
+
+def get_port(used_port):
+    if os.path.isfile(used_port):
+        port = open(used_port, 'r').read().strip(' \n')
+        if not port:
+            return False, get_free_port(used_port)
+        try:
+            r = requests.get('http://localhost:%s' % port, timeout=0.3)
+        except:
+            return False, get_free_port(used_port)
+        if 'LanguageTool' in r.text:
+            return True, port
+    return False, get_free_port(used_port)
 
 
 class LanguagetoolServer():
 
-    def __init__(self, path, port=None):
-        self.port = port or get_free_port()
-        cmd = ['java', '-cp', os.path.join(path, 'languagetool-server.jar'),
-               'org.languagetool.server.HTTPServer', '--port', self.port]
-        self.process = subprocess.Popen(
-            cmd,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True,)
-        while 'Server started' not in self.process.stdout.readline():
-            # waiting for server start
-            pass
+    def __init__(self, path):
+        config_dir = user_data_dir('slidelint')
+        if not os.path.exists(config_dir):
+            os.makedirs(config_dir)
+        used_port = os.path.join(config_dir, 'used_port')
+        started, self.port = get_port(used_port)
+        if not started:
+            cmd = ['java', '-cp', os.path.join(path, 'languagetool-server.jar'),
+                   'org.languagetool.server.HTTPServer', '--port', self.port]
+            self.process = subprocess.Popen(
+                cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True,)
+            while 'Server started' not in self.process.stdout.readline():
+                # waiting for server start
+                pass
 
     def grammar_checker(self, text, language="en-US"):
         url = 'http://127.0.0.1:%s' % self.port
@@ -52,7 +71,8 @@ class LanguagetoolServer():
         return self.grammar_checker
 
     def __exit__(self, type, value, traceback):
-        self.process.kill()
+        pass
+        # self.process.kill()
 
 
 messages = (

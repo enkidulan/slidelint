@@ -4,6 +4,7 @@ from slidelint import namespace
 
 import logging
 logger = logging.getLogger(__name__)
+user_messages = logging.getLogger('user_messages')
 
 here = os.path.dirname(os.path.abspath(__file__))
 
@@ -22,7 +23,7 @@ class LintConfig():
     def __init__(self, configfile_path=""):
         path = configfile_path and os.path.isfile(configfile_path) and configfile_path
         if not path:
-            logger.warn("No config file found, using default configuration")
+            user_messages.info("No config file found, using default configuration")
             path = os.path.join(here, 'default.cfg')
         self.config = ConfigParser()
         self.config.read(path)

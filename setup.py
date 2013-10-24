@@ -103,7 +103,8 @@ setup(name='slidelint',
           'tests': ['testfixtures',
                     'nose',
                     'nose-selecttests',
-                    'coverage']
+                    'coverage',
+                    'fabric']
       },
       include_package_data=True,
       zip_safe=False,
@@ -116,6 +117,8 @@ setup(name='slidelint',
           'lxml',
           'tempdir',
           'pillow',
+          'appdirs',
+          'requests',
           # '3to2',
           # 'language_tool', # don't work with python2
           # 'nltk', # not release for python3
@@ -130,6 +133,7 @@ setup(name='slidelint',
       Text.contents = slidelint.checkers.contents:main
       Text.fontsize = slidelint.checkers.fontsize:main
       Text.edges_danger_zone = slidelint.checkers.edges_danger_zone:main
+      Text.readability = slidelint.checkers.readability:main
       ContentQuality.language_tool_checker = slidelint.checkers.language_tool_checker:main
       ContentQuality.regex_grammar_checker = slidelint.checkers.regex_grammar_checker:main
 
