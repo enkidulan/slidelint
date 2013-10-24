@@ -21,16 +21,40 @@ Options:
   -d <msg_ids> --disable=<msg_ids>  Enable the message, report, category or checker with the given id(s). You can either give multiple
                                           identifier separated by comma (,) or put this option multiple time.
 """
-import os
 from docopt import docopt
 from slidelint.resources import PlugginsHandler
 from slidelint.config_parser import LintConfig
 from slidelint.outputs import output_handler
-import time
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+class MultiprocessingManager():
+    """ class for handling multiprocessing run """
+    def __init__(self):
+        """ seq if ((callable, {}) """
+        self.queues = []
+        self.poll = []
+
+    def add(self, func, kwargs):
+        queue = Queue()
+        self.queues.append(queue)
+        self.poll.append(Process(target=self.wrapper, args=(queue, func, kwargs)))
+
+    def wrapper(self, queue, funk, kwargs):
+        rez = funk(**kwargs)
+        queue.put(rez)
+
+    def __iter__(self):
+        for p in self.poll:
+            p.start()
+        for p in self.poll:
+            p.join()
+        for checker_rez in self.queues:
+            for rez in checker_rez.get():
+                yield rez
 
 
 def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="slidelint.pluggins"):
@@ -52,23 +76,11 @@ def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="
             disabled_categories=config.disable_categories,
             disabled_checkers=config.disable_checkers
         )
-        rezult = []
-        # pp = []
-        # for checker in checkers:
-        #     kwargs = {'target_file': target_file}
-        #     kwargs.update(config.get_checker_args(checker.name))
-        #     pp.append(Process(target=checker.check, kwargs=kwargs))
-        # for p in pp:
-        #   p.start()
-        # for p in pp:
-        #   p.join()
+        rezult = MultiprocessingManager()
         for checker in checkers:
             kwargs = {'target_file': target_file}
-            # start = time.time()
             kwargs.update(config.get_checker_args(checker.name))
-            rezult += checker.check(**kwargs)
-            # end = time.time()
-            # print "%s: %0.4f" % (checker.name, end - start)
+            rezult.add(checker.check, kwargs)
     return output_handler(target_file, rezult, msg_ids, output['format'],
                           output['files_output'], output['ids'])
 
