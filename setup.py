@@ -12,6 +12,26 @@ from os.path import join
 here = os.path.dirname(os.path.abspath(__file__))
 
 
+class RequestProgressWrapper():
+    def __init__(self, obj):
+        self.obj = obj
+        self.total_size = float(obj.info().getheader('Content-Length').strip())
+        self.url = obj.url
+        self.bytes_so_far = 0
+
+    def read(self, length):
+        self.bytes_so_far += length
+        percent = self.bytes_so_far / self.total_size
+        percent = round(percent*100, 2)
+        sys.stdout.write("%s: downloaded %d of %d bytes (%0.f%%)\r" %
+           (self.url, self.bytes_so_far, self.total_size, percent))
+        sys.stdout.flush()
+        return self.obj.read(length)
+
+    def __del__(self):
+        sys.stdout.write('\n')
+
+
 def download_ziped_resource(path, url, name, unzip=False):
     full_path = join(path, name)
     if os.path.exists(full_path):
@@ -19,7 +39,7 @@ def download_ziped_resource(path, url, name, unzip=False):
     req = urllib2.urlopen(url)
     data_destination = NamedTemporaryFile() if unzip else open(full_path, 'wb')
     with data_destination as f:
-        shutil.copyfileobj(req, f)
+        shutil.copyfileobj(RequestProgressWrapper(req), f)
         if unzip:
             f.file.seek(0)
             zfile = zipfile.ZipFile(f.name)
@@ -44,14 +64,6 @@ def data_loader(command_subclass):
              'LanguageTool',
              True),
             msg="Downloading LanguageTool")
-        # self.execute(
-        #     download_ziped_resource,
-        #     (base_path,
-        #      'http://nltk.github.com/nltk_data/packages/tokenizers/punkt.zip',
-        #      'punkt',
-        #      True),
-        #     msg="Downloading punkt nltk data")
-
     command_subclass.run = modified_run
     return command_subclass
 
@@ -119,9 +131,6 @@ setup(name='slidelint',
           'pillow',
           'appdirs',
           'requests',
-          # '3to2',
-          # 'language_tool', # don't work with python2
-          # 'nltk', # not release for python3
           # -*- Extra requirements: -*-
       ],
       entry_points="""
