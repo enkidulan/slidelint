@@ -58,7 +58,7 @@ class TestLinterRunner(unittest.TestCase):
                        "C2011:: warning message with id C2011 (critical-C2011)\n")
 
     def test_file_check(self):
-        results = lint(**self.kwargs)
+        results = list(lint(**self.kwargs))
         compare(results,
             [dict(id='C2011', msg_name='critical-C2011',
                   msg='warning message with id C2011', page='1'),

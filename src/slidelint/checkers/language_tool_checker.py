@@ -96,7 +96,7 @@ def main(target_file=None, msg_info=None):
                     rez.append({
                         'id': 'C1010',
                         'page': '%s' % (num + 1),
-                        'msg_name': 'language-tool-%s' % error.get('ruleId'),
+                        'msg_name': error.get('ruleId'),
                         'msg': '%s - %s' % (error.get('locqualityissuetype'),
                                                 error.get('msg')),
                         'help': error.get('context')})
