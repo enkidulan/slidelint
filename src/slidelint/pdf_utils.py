@@ -7,7 +7,7 @@ from pdfminer.pdfinterp import (
 )
 from pdfminer.converter import PDFPageAggregator, TextConverter
 from pdfminer.layout import LAParams, LTChar, LTTextLine, LTTextBox
-
+import string
 
 def split_to_sentences_per_pages(text):
     def split_into_sentences(line):
@@ -25,7 +25,7 @@ def convert_pdf_to_text(path):
     process_pdf(rsrcmgr, device, fp)
     fp.close()
     device.close()
-    text = retstr.getvalue()
+    text = "".join(j for j in retstr.getvalue() if j in string.printable)
     retstr.close()
     return split_to_sentences_per_pages(text)
 

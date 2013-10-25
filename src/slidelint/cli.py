@@ -33,28 +33,41 @@ logger = logging.getLogger(__name__)
 
 class MultiprocessingManager():
     """ class for handling multiprocessing run """
-    def __init__(self):
+    def __init__(self, debug=False):
         """ seq if ((callable, {}) """
-        self.queues = []
         self.poll = []
+        self.debug = debug
 
     def add(self, func, kwargs):
-        queue = Queue()
-        self.queues.append(queue)
-        self.poll.append(Process(target=self.wrapper, args=(queue, func, kwargs)))
+        self.poll.append((func, kwargs))
 
     def wrapper(self, queue, funk, kwargs):
-        rez = funk(**kwargs)
-        queue.put(rez)
+        try:
+            rez = funk(**kwargs)
+            queue.put(rez)
+        except Exception, msg:
+            logger.error(msg)
+            queue.put([])
 
     def __iter__(self):
-        for p in self.poll:
-            p.start()
-        for p in self.poll:
-            p.join()
-        for checker_rez in self.queues:
-            for rez in checker_rez.get():
-                yield rez
+        if self.debug:
+            for func, kwargs in self.poll:
+                for rez in func(**kwargs):
+                    yield rez
+        else:
+            queues = []
+            processes = []
+            for func, kwargs in self.poll:
+                queue = Queue()
+                processes.append(Process(target=self.wrapper, args=(queue, func, kwargs)))
+                queues.append(queue)
+            for p in processes:
+                p.start()
+            # for p in self.poll:
+            #     p.join()
+            for checker_rez in queues:
+                for rez in checker_rez.get():
+                    yield rez
 
 
 def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="slidelint.pluggins"):
@@ -76,7 +89,7 @@ def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="
             disabled_categories=config.disable_categories,
             disabled_checkers=config.disable_checkers
         )
-        rezult = MultiprocessingManager()
+        rezult = MultiprocessingManager(False)
         for checker in checkers:
             kwargs = {'target_file': target_file}
             kwargs.update(config.get_checker_args(checker.name))
