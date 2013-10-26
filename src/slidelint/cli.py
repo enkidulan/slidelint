@@ -110,5 +110,5 @@ def cli():
               'ids': args['--include-ids']
               }
     enable_disable_ids = (args['--enable'], args['--disable'])
-    msg_info = "All" or args['<msg_id>'] if args['help-msg'] else False
+    msg_info = args['<msg_id>'] or "All" if args['help-msg'] else False
     lint(target_file, config_file, output, enable_disable_ids, msg_info)
