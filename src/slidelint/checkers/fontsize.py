@@ -28,7 +28,7 @@ def check_text_size(path, min_page_ratio='6'):
             if character.size * min_page_ratio < page_size:
                 msg = {}
                 msg.update(messages[0])
-                msg['page'] = '%s' % (page_num + 1)
+                msg['page'] = 'Slide %s' % (page_num + 1)
                 rez.append(msg)
                 break
     return rez

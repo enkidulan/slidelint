@@ -32,7 +32,7 @@ class TestFontSizeChecker(unittest.TestCase):
         compare(rez,
                 [dict(id='C1002', msg_name='font-to-small', msg='Font is to small: Text should take up a minimum of 1/6th the page.',
                       help="Font is to small: Text should take up a minimum of 1/6th the page.",
-                      page='1')])
+                      page='Slide 1')])
 
     def test_file_with_large_text(self):
       for prefix in ('GD', 'LO'):

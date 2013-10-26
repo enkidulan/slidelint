@@ -25,7 +25,7 @@ messages = (
     dict(id='C3000',
          msg_name='text-readability',
          msg='Text is not readable enough',
-         help="Change text or background color"),)
+         help="Projectors are notorious for not having good contrast. Your text to too close to the background color and might be unreadable."),)
 
 
 def tranform2html(source, dist, out_name='out.html'):
@@ -148,8 +148,8 @@ def main(target_file=None, msg_info=None, scale=1, max_similarity=0.1, cross_ran
             if similarity > max_similarity:
                 rez.append(dict(id='C3000',
                                 msg_name='text-readability',
-                                msg='Text is not readable enough',
-                                help="Change text or background color",
-                                page='%s' % (page_num + 1)))
+                                msg='Low text color to background contrast.',
+                                help="Projectors are notorious for not having good contrast. Your text to too close to the background color and might be unreadable.",
+                                page='Slide %s' % (page_num + 1)))
                 break
     return rez

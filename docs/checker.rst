@@ -1,4 +1,12 @@
 
+C2000-2300 - lingvo tool
+W1001 - contents
+C1002 - fontsize
+C1003 - danger zone
+C3000 - readability
+W4000 - regexp
+
+
 
 Writing a checker
 =================

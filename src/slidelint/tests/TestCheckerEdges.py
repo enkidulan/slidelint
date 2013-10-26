@@ -33,19 +33,19 @@ class TestEdgesDangerZoneChecker(unittest.TestCase):
                 [dict(id='C1003', msg_name='too-close-to-edges',
                       msg='Too close to edges: Text should not appear close to the edges.',
                       help="Too close to edges: Text should not appear close to the edges.",
-                      page='1'),
+                      page='Slide 1'),
                 dict(id='C1003', msg_name='too-close-to-edges',
                       msg='Too close to edges: Text should not appear close to the edges.',
                       help="Too close to edges: Text should not appear close to the edges.",
-                      page='2'),
+                      page='Slide 2'),
                 dict(id='C1003', msg_name='too-close-to-edges',
                       msg='Too close to edges: Text should not appear close to the edges.',
                       help="Too close to edges: Text should not appear close to the edges.",
-                      page='3'),
+                      page='Slide 3'),
                 dict(id='C1003', msg_name='too-close-to-edges',
                       msg='Too close to edges: Text should not appear close to the edges.',
                       help="Too close to edges: Text should not appear close to the edges.",
-                      page='4')])
+                      page='Slide 4')])
 
     def test_text_if_not_near_edges(self):
       for prefix in ('GD', 'LO'):

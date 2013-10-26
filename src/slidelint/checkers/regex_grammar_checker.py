@@ -34,7 +34,7 @@ def main(target_file=None, source_file=None, re_options=None, id=None,
                 if match:
                     rez.append({
                         'id': id,
-                        'page': '%s' % (num + 1),
+                        'page': 'Slide %s' % (num + 1),
                         'msg_name': msg_name,
                         'msg': '%s: "%s" mentioned in "%s"' % (msg, str(match.group()), paragraph),
                         'help': help})

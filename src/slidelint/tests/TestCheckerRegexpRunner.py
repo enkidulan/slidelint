@@ -25,12 +25,12 @@ class TestRegexGrammarChecker(unittest.TestCase):
                   u'id': u'W2000',
                   u'msg': u'Gender Mention: " guys!" mentioned in "Hello guys!"',
                   u'msg_name': u'gender-mention',
-                  'page': '1'},
+                  'page': 'Slide 1'},
                 {u'help': u'Gendered pronouns are those that indicate gender: he, she, him, her, hers, his, himself and herself. All others, like "it, "one," and "they," are gender neutral.',
                   u'id': u'W2000',
                   u'msg': u'Gender Mention: "He " mentioned in "He wrote awesome code!"',
                   u'msg_name': u'gender-mention',
-                  'page': '3'},])
+                  'page': 'Slide 3'},])
 
     def test_checker_helpers(self):
         kwargs = {

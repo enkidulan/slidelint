@@ -5,6 +5,8 @@ import os
 import sys
 from colorama import Fore
 
+import logging
+user_messages = logging.getLogger('user_messages')
 
 class BaseReporter():
     only_full_id = False
@@ -109,7 +111,10 @@ def output_handler(path, rezults, mute_ids=[], format='text', report_file=False,
     # raw format for testing purposes or some other level of communication
     if format == 'raw':
         return rezults
-    formater = REPORTERS_MAPING.get(format, 'text')(show_id, mute_ids, path)
+    if format not in REPORTERS_MAPING:
+        user_messages.info("No '%s' formatter found(use one of '%s'), using text formating",
+                           format, REPORTERS_MAPING.keys())
+    formater = REPORTERS_MAPING.get(format, TextReporter)(show_id, mute_ids, path)
     formated_report = formater(rezults)
     if report_file:
         name = path.rsplit(os.path.sep, 1)[1][:-3] + 'lintrez'

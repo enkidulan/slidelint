@@ -39,7 +39,7 @@ def check_edges_danger_zone(path, min_page_ratio=12):
             if not all(legal):
                 msg = {}
                 msg.update(messages[0])
-                msg['page'] = '%s' % (page_num + 1)
+                msg['page'] = 'Slide %s' % (page_num + 1)
                 rez.append(msg)
                 break
     return rez
