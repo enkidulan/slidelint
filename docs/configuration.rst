@@ -69,13 +69,13 @@ So actual pipeline representation will look like this:
 
 ::
 
-    [pipeline]
+    [CATEGORIES]
     categories =
         CategoryA
         CategoryC
 
     [CategoryA]
-    name = CategoryA
+    category = CategoryA
     enable =
         checker3
 

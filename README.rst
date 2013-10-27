@@ -22,8 +22,8 @@ Installation
 
 
 
-:: 
- 
+::
+
    $ sudo apt-get install openjdk-7-jre zlib1g-dev python-lxml python-dev poppler-utils poppler-data
 
 
@@ -106,12 +106,15 @@ the result as an html files(separated file for each category):
     $ slidelint --files-output  -f html presentation.pdf
 
 
-Read a configuration from default config. Enable all checks from ‘new_package.new_category’
-category. Disable all checks from ‘slidelint.content_quality’. Disable ‘edges’ checker. Disable message with id C5001.
+Read a configuration from default config file. Disable all checks from 'ContentQuality'
+category and disable check with name edges_danger_zone and message with id
+C1002. Enable 'language_tool_checker' checker (e.g. when you want to disable
+all checkers from ContentQuality that is enabled in config file but left only
+language_tool_checker from ContentQuality category).
 
 ::
 
-    $ slidelint -e new_package.new_category -d slidelint.content_quality,edges,C5001  presentation.pdf
+    $ slidelint -d C1002,ContentQuality,edges_danger_zone -e language_tool_checker  presentation.pdf
 
 Read a configuration from my_config.cfg file, and include ids in the report and  presentation.pdf
 
