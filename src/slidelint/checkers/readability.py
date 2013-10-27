@@ -13,8 +13,9 @@ from math import exp
 def layout_characters(layout):
     for item in layout:
         if isinstance(item, LTChar):
-            if ord(item._text) > 32:
-                yield item
+            if not 'cid' in item._text:
+                if ord(item._text) > 32:
+                    yield item
         elif isinstance(item, LTTextLine):
             yield [i for i in layout_characters(item)]
         elif isinstance(item, LTTextBox):
@@ -125,7 +126,7 @@ class VisibilityChecker():
         grayscale_color = html_color_to_grayscale(html_color)
         start = grayscale_color - self.cross_range
         end = grayscale_color + self.cross_range
-        total_colors = sum(histogram)
+        total_colors = sum(histogram) + 1
         left_colors_slice = histogram[start if start > 0 else 0:grayscale_color]
         right_colors_slice = histogram[grayscale_color + 1:end if end < 256 else None]
         main_color = histogram[grayscale_color]
