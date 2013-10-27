@@ -21,22 +21,13 @@ class TestInstallation(unittest.TestCase):
 
     def setUp(self):
         self.target_file = os.path.join(here, 'files', 'pdfs', 'presentation3.pdf')
-        self.temp_path = tempdir.TempDir()
-        self.dir = self.temp_path.name
-        with api.lcd(self.dir):
-            run("virtualenv --no-site-packages .")
-            run("bin/pip install https://github.com/enkidulan/slidelint/archive/master.tar.gz")
+        self.dir = os.getcwd()
 
-    def tearDown(self):
-        self.temp_path.dissolve()
-
-    # def test_pip_install(self):
-            # run("bin/easy_install https://github.com/enkidulan/slidelint/archive/master.tar.gz")
-            # run("virtualenv --no-site-packages .")
-    #     with api.lcd(self.dir):
-    #         # run("virtualenv --no-site-packages .")
-    #         # run("bin/pip install https://github.com/enkidulan/slidelint/archive/master.tar.gz")
-    #         rez = run("bin/slidelint %s" % self.target_file)
+    def test_pip_instalation(self):
+        with tempdir.TempDir() as t:
+            with api.lcd(t):
+                run("virtualenv --no-site-packages .")
+                run("bin/pip install https://github.com/enkidulan/slidelint/archive/master.tar.gz")
 
     def test_info_option(self):
         with api.lcd(self.dir):

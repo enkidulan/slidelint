@@ -89,7 +89,7 @@ def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="
             disabled_categories=config.disable_categories,
             disabled_checkers=config.disable_checkers
         )
-        rezult = MultiprocessingManager(debug=True)
+        rezult = MultiprocessingManager()
         for checker in checkers:
             kwargs = {'target_file': target_file}
             kwargs.update(config.get_checker_args(checker.name))
