@@ -111,16 +111,18 @@ class LintConfig():
         self.handle_disable_checkers()
         self.checkers_isd = [i[0] for i in self.checkers]
 
-    def compose(self, enables, disables):
+    def compose(self, pluggins, enables, disables):
         """
         Extends config file configuration with additional parameters
         """
-        messages, checkers, categories = namespace.clasify(enables)
+        messages, echeckers, categories = namespace.clasify(enables)
         self.categories += categories
-        self.checkers += [(i, {}) for i in checkers]
+        self.checkers += [(i, {}) for i in echeckers]
         self.messages += messages
         messages, checkers, categories = namespace.clasify(disables)
         self.disable_categories += categories
+        self.disable_checkers += [c.name for c in pluggins
+            if c.category in self.disable_categories and c.name not in echeckers]
         self.disable_checkers += checkers
         self.disable_messages += messages
         self.checkers_isd = [i[0] for i in self.checkers]

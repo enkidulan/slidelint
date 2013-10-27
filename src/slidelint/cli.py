@@ -9,7 +9,6 @@ Arguments:
 
 Options:
   -h --help              show this help message and exit
-  --version              show version and exit
   -i --include-ids       include ids in report [default: False]
   --config=<configfile>  path to configuration file
   -f <format> --output-format=<format>  Set the output format
@@ -20,6 +19,7 @@ Options:
                                          identifier separated by comma (,) or put this option multiple time.
   -d <msg_ids> --disable=<msg_ids>  Enable the message, report, category or checker with the given id(s). You can either give multiple
                                           identifier separated by comma (,) or put this option multiple time.
+
 """
 from docopt import docopt
 from slidelint.resources import PlugginsHandler
@@ -73,7 +73,7 @@ class MultiprocessingManager():
 def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="slidelint.pluggins"):
     pluggins = PlugginsHandler(group=group)
     config = LintConfig(config_file)
-    config.compose(*enable_disable_ids)
+    config.compose(pluggins.checkers, *enable_disable_ids)
     if msg_info:
         rezult = []
         for checker in pluggins.load_checkers():

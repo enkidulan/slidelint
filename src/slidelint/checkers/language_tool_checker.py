@@ -8,6 +8,7 @@ import urllib
 import socket
 from appdirs import user_data_dir
 import requests
+import time
 
 package_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 lt_path = os.path.join(package_root, 'LanguageTool')
@@ -573,13 +574,12 @@ class LanguagetoolServer():
             while 'Server started' not in self.process.stdout.readline():
                 # waiting for server start
                 pass
+        self.url = 'http://127.0.0.1:%s' % self.port
 
     def grammar_checker(self, text, language="en-US"):
-        url = 'http://127.0.0.1:%s' % self.port
         data = dict(language=language, text=text)
-        req = urllib2.Request(url, data=urllib.urlencode(data))
-        content = urllib2.urlopen(req).read()
-        root = etree.fromstring(content)
+        content = requests.post(self.url, data=data, timeout=15)
+        root = etree.fromstring(content.text.encode('utf-8'))
         return root.findall('error')
 
     def __enter__(self):
