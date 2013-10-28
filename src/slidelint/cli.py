@@ -25,56 +25,35 @@ from docopt import docopt
 from slidelint.resources import PlugginsHandler
 from slidelint.config_parser import LintConfig
 from slidelint.outputs import output_handler
-from multiprocessing import Process, Queue
+from slidelint.utils import MultiprocessingManager
 
 import logging
 logger = logging.getLogger(__name__)
 
 
-class MultiprocessingManager():
-    """ class for handling multiprocessing run """
-    def __init__(self, debug=False):
-        """ seq if ((callable, {}) """
-        self.poll = []
-        self.debug = debug
+def lint(target_file, config_file, output, enable_disable_ids,
+         msg_info, group="slidelint.pluggins"):
+    """ main function that bring all thing together: load slidelint pluggins,
+    parsing config file, handle command-line options, run checkers, handling output
 
-    def add(self, func, kwargs):
-        self.poll.append((func, kwargs))
+    It takes:
 
-    def wrapper(self, queue, funk, kwargs):
-        try:
-            rez = funk(**kwargs)
-            queue.put(rez)
-        except Exception, msg:
-            logger.error(msg)
-            queue.put([])
-
-    def __iter__(self):
-        if self.debug:
-            for func, kwargs in self.poll:
-                for rez in func(**kwargs):
-                    yield rez
-        else:
-            queues = []
-            processes = []
-            for func, kwargs in self.poll:
-                queue = Queue()
-                processes.append(Process(target=self.wrapper, args=(queue, func, kwargs)))
-                queues.append(queue)
-            for p in processes:
-                p.start()
-            # for p in self.poll:
-            #     p.join()
-            for checker_rez in queues:
-                for rez in checker_rez.get():
-                    yield rez
-
-
-def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="slidelint.pluggins"):
+        * target_file - path to pdf file or None
+        * config_file - path to config file or None
+        * output - it's a dict object for controlling results output:
+            format - format of the output report, it's None
+                     or one of [text', 'parseable', 'colorized', 'msvs', 'html'],
+            files_output - True or False, if True than report will be
+                           written to file otherwise printed to stdout,
+            ids - if True then messages ids will be added to report
+        * enable_disable_ids - command-line options for enabling/disabling
+                               messages/checkers/categories, takes
+        * msg_info -  ['list of messages ids,], None, or 'All' """
     pluggins = PlugginsHandler(group=group)
     config = LintConfig(config_file)
     config.compose(pluggins.checkers, *enable_disable_ids)
     if msg_info:
+        # displaying help messages
         rezult = []
         for checker in pluggins.load_checkers():
             kwargs = {'msg_info': msg_info}
@@ -82,6 +61,7 @@ def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="
             rezult += list(checker.check(**kwargs))
         msg_ids = []
     else:
+        # run checkers
         msg_ids = config.disable_messages  # mute messaging from appearing in report
         checkers = pluggins.load_checkers(
             categories=config.categories,
@@ -89,11 +69,11 @@ def lint(target_file, config_file, output, enable_disable_ids, msg_info, group="
             disabled_categories=config.disable_categories,
             disabled_checkers=config.disable_checkers
         )
-        rezult = MultiprocessingManager()
+        rezult = MultiprocessingManager()  # lets run all checkers separately in different processes
         for checker in checkers:
             kwargs = {'target_file': target_file}
             kwargs.update(config.get_checker_args(checker.name))
-            rezult.add(checker.check, kwargs)
+            rezult.append(checker.check, kwargs)
     return output_handler(target_file, rezult, msg_ids, output['format'],
                           output['files_output'], output['ids'])
 
@@ -110,5 +90,5 @@ def cli():
               'ids': args['--include-ids']
               }
     enable_disable_ids = (args['--enable'], args['--disable'])
-    msg_info = args['<msg_id>'] or "All" if args['help-msg'] else False
+    msg_info = args['<msg_id>'] or "All" if args['help-msg'] else None
     lint(target_file, config_file, output, enable_disable_ids, msg_info)

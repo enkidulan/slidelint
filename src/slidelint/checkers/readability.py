@@ -1,9 +1,10 @@
+''' Text color to background contrast checker '''
 from slidelint.utils import help
 import os
 import tempdir
 import subprocess
 from lxml import html
-from slidelint.pdf_utils import document_pages_layouts
+from slidelint.pdf_utils import document_pages_layouts, layout_characters
 from pdfminer.layout import LAParams, LTChar, LTTextLine, LTTextBox
 from PIL import Image, ImageDraw
 import re

@@ -1,3 +1,4 @@
+""" Font size checker """
 from slidelint.utils import help
 from slidelint.pdf_utils import document_pages_layouts, layout_characters
 

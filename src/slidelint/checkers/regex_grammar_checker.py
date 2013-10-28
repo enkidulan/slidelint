@@ -1,3 +1,5 @@
+""" config file based checker - runs text against set of regexps.
+messages and regexps are defined in the config file"""
 import re
 import os.path
 from slidelint.utils import help as help_msg_formatter

@@ -1,3 +1,5 @@
+""" No text found checker """
+#TODO: this thing also can check pages allowed range and word allowed range
 from slidelint.utils import help
 from slidelint.pdf_utils import convert_pdf_to_text
 

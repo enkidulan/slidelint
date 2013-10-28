@@ -1,8 +1,11 @@
+""" namespace helper module - it contains functions for names
+validation and classification """
 import re
 
 message = re.compile(r"^[A-Z]\d{4}$")
 checker = re.compile(r"^[a-z][a-z_0-9]+[a-z0-9]$")
 category = re.compile(r"^[A-Z][a-zA-Z]+$")
+
 
 def valid_category_id(name):
     if not category.match(name):

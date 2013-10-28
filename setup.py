@@ -13,6 +13,8 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 
 class RequestProgressWrapper():
+    """ Simple helper for displaying file download progress;
+    if works with file-like objects"""
     def __init__(self, obj):
         self.obj = obj
         self.total_size = float(obj.info().getheader('Content-Length').strip())
@@ -22,7 +24,7 @@ class RequestProgressWrapper():
     def read(self, length):
         self.bytes_so_far += length
         percent = self.bytes_so_far / self.total_size
-        percent = round(percent*100, 2)
+        percent = round(percent * 100, 2)
         sys.stdout.write("%s: downloaded %d of %d bytes (%0.f%%)\r" %
            (self.url, self.bytes_so_far, self.total_size, percent))
         sys.stdout.flush()
@@ -33,6 +35,7 @@ class RequestProgressWrapper():
 
 
 def download_ziped_resource(path, url, name, unzip=False):
+    """ files download helper """
     full_path = join(path, name)
     if os.path.exists(full_path):
         return
@@ -91,7 +94,6 @@ long_description = (
     open('CHANGES.txt').read()
     + '\n')
 
-
 setup(name='slidelint',
       version=version,
       description="Reads in PDF of presentation slides and checks common problems, outputs a summary report on the problems.",
@@ -106,8 +108,8 @@ setup(name='slidelint',
       author_email='',
       url='',
       license='apache2.0 (http://www.apache.org/licenses/LICENSE-2.0)',
-      packages=find_packages('src'),
       package_dir = {'': 'src'},
+      packages=find_packages('src', exclude=('slidelint.tests', 'slidelint.tests.*')),
       # namespace_packages=['slidelint'],
       cmdclass={'install': InstallCommand,
                 'develop': DevelopCommand},
@@ -118,12 +120,12 @@ setup(name='slidelint',
                     'coverage',
                     'fabric']
       },
-      include_package_data=True,
+      package_data = {'':['default.cfg', 'logging.conf']},
       zip_safe=False,
       install_requires=[
           'setuptools',
           'docopt',
-          'configparser',  # only for python2
+          'configparser',
           'colorama',
           'pdfminer==20110515',
           'lxml',

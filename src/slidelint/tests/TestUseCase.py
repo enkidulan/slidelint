@@ -17,7 +17,7 @@ def run(*arg, **kwargs):
              "%s:\n%s" % (api.env.host_string, repr(arg), message.message))
 
 
-class TestInstallation(unittest.TestCase):
+class TestAcceptance(unittest.TestCase):
 
     def setUp(self):
         self.target_file = os.path.join(here, 'files', 'pdfs', 'presentation3.pdf')
@@ -155,11 +155,8 @@ class TestInstallation(unittest.TestCase):
                 "C:Slide 11: Too close to edges (too-close-to-edges)\n"
                 "C:Slide 12: Too close to edges (too-close-to-edges)\n"
                 "C:Slide 11: Low text color to background contrast. (text-readability)\n"
-                "C:Slide 6: Font is to small (font-to-small)\n"
                 "C:Slide 7: Font is to small (font-to-small)\n"
-                "C:Slide 8: Font is to small (font-to-small)\n"
-                "C:Slide 9: Font is to small (font-to-small)\n"
-                "C:Slide 11: Font is to small (font-to-small)\n"
+                # "C:Slide 9: Font is to small (font-to-small)\n"
                 "W:Slide 10: Gender Mention: \" him\" mentioned in \"PICTURE WITH \n"
                 "CAPTION LAYOUT \n"
                 "Caption him\" (gender-mention)\n"

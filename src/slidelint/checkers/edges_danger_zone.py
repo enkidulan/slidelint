@@ -1,3 +1,4 @@
+""" Checker for determining text in danger zones around edges """
 from slidelint.utils import help
 from slidelint.pdf_utils import document_pages_layouts, layout_characters
 
@@ -25,11 +26,13 @@ def check_edges_danger_zone(path, min_page_ratio=12):
     for page_num, page_layout in document_pages_layouts(path):
         width_dist = page_layout.width / min_page_ratio
         height_dist = page_layout.height / min_page_ratio
+        # correlation of zero coordinates
         save_zone = (
             width_dist,
             height_dist,
             page_layout.width - width_dist,
             page_layout.height - height_dist)
+        # checking save zone
         for character in layout_characters(page_layout):
             legal = (
                 save_zone[0] < character.bbox[0],
