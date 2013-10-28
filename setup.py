@@ -27,7 +27,6 @@ class RequestProgressWrapper():
         percent = round(percent * 100, 2)
         sys.stdout.write("%s: downloaded %d of %d bytes (%0.f%%)\r" %
            (self.url, self.bytes_so_far, self.total_size, percent))
-        sys.stdout.flush()
         return self.obj.read(length)
 
     def __del__(self):
@@ -120,7 +119,7 @@ setup(name='slidelint',
                     'coverage',
                     'fabric']
       },
-      package_data = {'':['default.cfg', 'logging.conf']},
+      package_data = {'':['default.cfg', 'logging.conf', 'checkers/regex_rules/gendered_pronouns']},
       zip_safe=False,
       install_requires=[
           'setuptools',
