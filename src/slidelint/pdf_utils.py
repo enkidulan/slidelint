@@ -39,8 +39,9 @@ def layout_characters(layout):
     for item in layout:
         if isinstance(item, LTChar):
             # no need to yield 'invisible' symbols
-            if item._text in string.printable and ord(item._text) > 32:
-                yield item
+            if len(item._text) == 1:
+                if ord(item._text) > 32:
+                    yield item
         elif isinstance(item, LTTextLine):
             for i in layout_characters(item):
                 yield i

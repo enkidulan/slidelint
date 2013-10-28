@@ -9,6 +9,42 @@ C3000 - readability
 W4000 - regexp
 
 
+Text color to background contrast checker
+=========================================
+
+This checker compare grayscale character background colors histogram to character color.
+
+::
+
+    [readability]
+    checker = readability
+    scale = 3
+    max_similarity = 0.1
+    cross_range = 60
+
+Where:
+
+    * cross_range - range of values around text color on background histogram values for analyzing
+    * scale - controls progressiveness of main color distance exponential coefficient of correlation
+              function (it makes background histogram colors that distant from text color less important)
+    * max_similarity - the max allowed value of color similarity between text and its background
+
+
+Language tool checker
+=====================
+
+It's wrapper around languagetool, for more details look at http://www.languagetool.org
+
+::
+
+    [language_tool_checker]
+    checker = language_tool_checker
+    keep_alive = true
+
+Language Tool server start pretty slow so you can keep its running at background
+ with option "keep_alive = true"
+
+
 Creating new regexp checker
 ============================
 

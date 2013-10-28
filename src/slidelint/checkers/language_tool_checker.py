@@ -3,17 +3,12 @@ from slidelint.pdf_utils import convert_pdf_to_text
 import os
 import subprocess
 from lxml import etree
-import urllib2
-import urllib
 import socket
 from appdirs import user_data_dir
 import requests
-import time
 
 package_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 lt_path = os.path.join(package_root, 'LanguageTool')
-
-
 messages = (
      {'id': 'C2000',
       'msg_name': 'language-tool',
@@ -527,58 +522,65 @@ messages = (
 
 messages_by_rules = {m['msg_name']: m for m in messages}
 
-def get_free_port(file_to_store):
+
+def get_free_port():
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
     sock.bind(('', 0))
     sock.listen(socket.SOMAXCONN)
     ipaddr, port = sock.getsockname()
     sock.close()
-    with open(file_to_store, 'wb') as f:
-        f.write(str(port))
     return str(port)
 
 
-def get_port(used_port):
-    if os.path.isfile(used_port):
-        port = open(used_port, 'r').read().strip(' \n')
-        if not port:
-            return False, get_free_port(used_port)
-        try:
-            r = requests.get('http://localhost:%s' % port, timeout=0.3)
-        except:
-            return False, get_free_port(used_port)
-        if 'LanguageTool' in r.text:
-            return True, port
-    return False, get_free_port(used_port)
+def start_languagetool_server(lt_path, config_file):
+    port = get_free_port()
+    cmd = ['java', '-cp', os.path.join(lt_path, 'languagetool-server.jar'),
+           'org.languagetool.server.HTTPServer', '--port', port]
+    process = subprocess.Popen(
+        cmd,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True,)
+    pid = process.pid
+    with open(config_file, 'w') as f:
+        f.write("%s,%s" % (port, pid))
+    while 'Server started' not in process.stdout.readline():
+        # waiting for server start
+        pass
+    return port, pid
+
+
+def get_languagetool_port_and_pid(lt_path, config_file):
+    if os.path.isfile(config_file):
+        port, pid = open(config_file, 'r').read().strip(' \n').split(',')
+        if os.path.exists("/proc/%s" % pid):
+            return port, int(pid)
+    return start_languagetool_server(lt_path, config_file)
 
 
 class LanguagetoolServer():
 
-    def __init__(self, path, keep_alive=False):
+    def __init__(self, lt_path, keep_alive=False):
         self.keep_alive = keep_alive
         config_dir = user_data_dir('slidelint')
         if not os.path.exists(config_dir):
             os.makedirs(config_dir)
-        used_port = os.path.join(config_dir, 'used_port')
-        started, self.port = get_port(used_port)
-        self.process = None
-        if not started:
-            cmd = ['java', '-cp', os.path.join(path, 'languagetool-server.jar'),
-                   'org.languagetool.server.HTTPServer', '--port', self.port]
-            self.process = subprocess.Popen(
-                cmd,
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                universal_newlines=True,)
-            while 'Server started' not in self.process.stdout.readline():
-                # waiting for server start
-                pass
+        self.config_file = os.path.join(config_dir, 'run')
+        self.lt_path = lt_path
+        self.port, self.pid = get_languagetool_port_and_pid(self.lt_path, self.config_file)
         self.url = 'http://127.0.0.1:%s' % self.port
 
     def grammar_checker(self, text, language="en-US"):
         data = dict(language=language, text=text)
-        content = requests.post(self.url, data=data, timeout=15)
+        try:
+            content = requests.post(self.url, data=data, timeout=15)
+        except requests.exceptions.Timeout:
+            # after tense LanguagetoolServer are freezing, so it's needs a restart
+            os.kill(self.pid, 9)
+            self.port, self.pid = start_languagetool_server(self.lt_path, self.config_file)
+            self.url = 'http://127.0.0.1:%s' % self.port
+            content = requests.post(self.url, data=data, timeout=15)
         root = etree.fromstring(content.text.encode('utf-8'))
         return root.findall('error')
 
@@ -586,11 +588,12 @@ class LanguagetoolServer():
         return self.grammar_checker
 
     def __exit__(self, type, value, traceback):
-        if self.process and not self.keep_alive:
-            self.process.kill()
+        if not self.keep_alive:
+            os.kill(self.pid, 9)
+
 
 def main(target_file=None, msg_info=None, keep_alive='False'):
-    keep_alive = keep_alive.lower == 'true'
+    keep_alive = keep_alive.lower() == 'true'
     if msg_info:
         return help(messages, msg_info)
     pages = convert_pdf_to_text(target_file)

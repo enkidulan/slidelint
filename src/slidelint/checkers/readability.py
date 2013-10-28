@@ -1,14 +1,21 @@
 ''' Text color to background contrast checker '''
+# TODO: this code is pretty horrible and needs refactoring
 from slidelint.utils import help
 import os
 import tempdir
 import subprocess
 from lxml import html
-from slidelint.pdf_utils import document_pages_layouts, layout_characters
+from slidelint.pdf_utils import document_pages_layouts
 from pdfminer.layout import LAParams, LTChar, LTTextLine, LTTextBox
 from PIL import Image, ImageDraw
 import re
 from math import exp
+
+messages = (
+    dict(id='C3000',
+         msg_name='text-readability',
+         msg='Text is not readable enough',
+         help="Projectors are notorious for not having good contrast. Your text to too close to the background color and might be unreadable."),)
 
 
 def layout_characters(layout):
@@ -23,14 +30,11 @@ def layout_characters(layout):
             for i in layout_characters(item):
                 yield i
 
-messages = (
-    dict(id='C3000',
-         msg_name='text-readability',
-         msg='Text is not readable enough',
-         help="Projectors are notorious for not having good contrast. Your text to too close to the background color and might be unreadable."),)
-
 
 def tranform2html(source, dist, out_name='out.html'):
+    """ pdftohtml wrapper for transforming PDF to HTML with
+    page background images, it returns raw html and list of full
+    images paths"""
     outpath = os.path.join(dist, out_name)
     cmd = ['pdftohtml', '-c', '-noframes', '-zoom', '1',
            source, outpath]
@@ -49,6 +53,9 @@ def tranform2html(source, dist, out_name='out.html'):
 
 
 class TextColorExtractor():
+    """ extracts page characters color per page, works with
+    pdftohtml generated pages"""
+    # TODO: this should be replaced by character color extraction from PDF directly
     def __init__(self, raw_html):
         root = html.fromstring(raw_html)
         body = root.find('body')
@@ -64,24 +71,22 @@ class TextColorExtractor():
             color = self.class_color_mapping[paragraph.get('class', 'ft00')]
             colors.append([(color, character) for character in "".join(paragraph.itertext())
                    if character not in (u'\xa0',) and ord(character ) > 32])
-            #         # yield color, character
         return {
             'text': sum([[j[1] for j in i] for i in colors], []),
             'colors': sum([[j[0] for j in i] for i in colors], [])
         }
 
 
-
-def get_text_color_and_background(color_extractor, page_layout,
-                                  page_background, page_num):
-    text_colors = color_extractor(page_num)
+def get_text_color_and_background(text_colors, page_layout,
+                                  page_background):
     for characters in layout_characters(page_layout):
         text_set = [i._text for i in characters]
         first = ''.join(text_colors['text']).find(''.join(text_set))
         last = first + len(text_set)
-        del text_colors['text'][0:10]
-        colors_set = text_colors['colors'][0:10]
-        del text_colors['colors'][0:10]
+        text_range = slice(first, last)
+        del text_colors['text'][text_range]
+        colors_set = text_colors['colors'][text_range]
+        del text_colors['colors'][text_range]
         for character, color in zip(characters, colors_set):
             x0, y0, x1, y1 = map(int, character.bbox)
             box = (x0, page_layout.height - y1, x1, page_layout.height - y0)
@@ -96,8 +101,9 @@ def goes_throught_pages(source):
         document_layout = document_pages_layouts(source)
         for (page_num, page_layout), image_path in zip(document_layout, images):
             page_background = Image.open(image_path)
+            page_text_colors = color_extractor(page_num)
             page_images = get_text_color_and_background(
-                color_extractor, page_layout, page_background, page_num)
+                page_text_colors, page_layout, page_background)
             yield page_num, page_images
 
 
@@ -114,10 +120,11 @@ def html_color_to_grayscale(colorstring):
 
 
 class VisibilityChecker():
+    """ class for comparing character color to its background"""
     def __init__(self, scale=1, cross_range=50):
-        self.scale = scale
+        self.scale = 1 / scale
         self.cross_range = cross_range
-        self.cc = [exp(i/10.0) ** self.scale for i in range(1, self.cross_range+1)]
+        self.cc = [exp(i/10.0) ** self.scale for i in range(1, self.cross_range + 1)]
 
     def colors_slice_sum(self, colors_slice):
         return sum([d / k for k, d in zip(self.cc, colors_slice)])
@@ -141,9 +148,9 @@ def main(target_file=None, msg_info=None, scale=1, max_similarity=0.1, cross_ran
         return help(messages, msg_info)
     scale = float(scale)
     max_similarity = float(max_similarity)
-    cross_range = float(cross_range)
+    cross_range = int(cross_range)
     rez = []
-    visibility_checker = VisibilityChecker(scale)
+    visibility_checker = VisibilityChecker(scale, cross_range)
     for page_num, page_data in goes_throught_pages(target_file):
         for character, character_color, background in page_data:
             similarity = visibility_checker(character_color, background)

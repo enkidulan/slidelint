@@ -28,7 +28,12 @@ class BaseReporter():
         return msg
 
     def apply_formating(self, messages):
-        return [self.formatter.format(**msg) for msg in messages]
+        def encoding_normalazer(messages):
+            for m in messages:
+                for k in m:
+                    m[k] = m[k].encode('utf-8')
+                yield m
+        return [self.formatter.format(**msg) for msg in encoding_normalazer(messages)]
 
     def __call__(self, report):
         filtred = [self.preformatfix(msg) for msg in report if msg['id'] not in self.mute_ids]

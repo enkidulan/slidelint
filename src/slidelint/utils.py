@@ -1,5 +1,9 @@
 from multiprocessing import Process, Queue
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 def help(messages, msg_ids):
     rez = list(messages) if msg_ids == 'All'else \
         [m for m in messages if m['id'] in msg_ids]
