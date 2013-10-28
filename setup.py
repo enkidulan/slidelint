@@ -25,12 +25,11 @@ class RequestProgressWrapper():
         self.bytes_so_far += length
         percent = self.bytes_so_far / self.total_size
         percent = round(percent * 100, 2)
-        sys.stdout.write("%s: downloaded %d of %d bytes (%0.f%%)\r" %
-           (self.url, self.bytes_so_far, self.total_size, percent))
+        print "%s: downloaded %d of %d bytes (%0.f%%)\r" % (self.url, self.bytes_so_far, self.total_size, percent)
         return self.obj.read(length)
 
     def __del__(self):
-        sys.stdout.write('\n')
+        print '\n'
 
 
 def download_ziped_resource(path, url, name, unzip=False):
