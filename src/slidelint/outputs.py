@@ -29,10 +29,10 @@ class BaseReporter():
 
     def apply_formating(self, messages):
         def encoding_normalazer(messages):
-            for m in messages:
-                for k in m:
-                    m[k] = m[k].encode('utf-8')
-                yield m
+            for msg in messages:
+                for k, v in msg.items():
+                    msg[k] = v.encode('utf-8') if isinstance(v, basestring) else v
+                yield msg
         return [self.formatter.format(**msg) for msg in encoding_normalazer(messages)]
 
     def __call__(self, report):

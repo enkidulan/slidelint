@@ -14,20 +14,31 @@ Installation
 ************
 
 **System requirements:**
+
     * setuptools > 1.0
     * java-7 (for LanguageTool)
     * python-dev (python-develop)
-    * python-lxml
+    * libxml2-dev
+    * libxslt-dev
     * zlib1g-dev
 
 
+To install system requirements on Ubuntu run follow commands:
 
 ::
 
-   $ sudo apt-get install openjdk-7-jre zlib1g-dev python-lxml python-dev poppler-utils poppler-data
+    $ sudo pip install setuptools --upgrade
+    $ sudo apt-get install openjdk-7-jre zlib1g-dev libxml2-dev libxslt-dev python-lxml python-dev poppler-utils poppler-data
 
 
-Use zc.buildout **to install this package**:
+
+You can **install slide** with pip:
+
+.. code::
+
+    bin/pip install https://github.com/enkidulan/slidelint/archive/master.tar.gz
+
+or zc.buildout:
 
 .. code::
 
@@ -35,6 +46,8 @@ Use zc.buildout **to install this package**:
     $ cd slidelint
     $ python bootstrap.py
     $ bin/buildout
+
+
 
 
 ************
@@ -123,3 +136,4 @@ Read a configuration from my_config.cfg file, and include ids in the report and 
     $ slidelint --config=my_config.cfg -i presentation.pdf
 
 
+For **more documentation** look at docs directory.

@@ -112,6 +112,7 @@ setup(name='slidelint',
       packages=find_packages('src', exclude=('slidelint.tests', 'slidelint.tests.*')),
       # namespace_packages=['slidelint'],
       cmdclass={'install': InstallCommand,
+                'bdist_egg': InstallCommand,
                 'develop': DevelopCommand},
       extras_require={
           'tests': ['testfixtures',

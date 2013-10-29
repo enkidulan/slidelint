@@ -60,6 +60,7 @@ def lint(target_file, config_file, output, enable_disable_ids,
             kwargs.update(config.get_checker_args(checker.name))
             rezult += list(checker.check(**kwargs))
         msg_ids = []
+        output['ids'] = True
     else:
         # run checkers
         msg_ids = config.disable_messages  # mute messaging from appearing in report
