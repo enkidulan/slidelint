@@ -15,7 +15,7 @@ messages = (
     dict(id='C3000',
          msg_name='text-readability',
          msg='Text is not readable enough',
-         help="Projectors are notorious for not having good contrast. "),)
+         help="Projectors are notorious for not having good contrast."),)
 
 
 def layout_characters(layout):

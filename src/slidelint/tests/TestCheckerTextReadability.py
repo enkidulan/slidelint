@@ -36,9 +36,9 @@ class TestContentsChecker(unittest.TestCase):
 
     def test_checker_helpers(self):
         compare(readability.main(msg_info='All'),
-                [{'help': 'Projectors are notorious for not having good contrast. Your text to too close to the background color and might be unreadable.',
+                [{'help': 'Projectors are notorious for not having good contrast.',
                   'id': 'C3000',
-                  'msg': 'Projectors are notorious for not having good contrast. Your text to too close to the background color and might be unreadable.',
+                  'msg': 'Projectors are notorious for not having good contrast.',
                   'msg_name': 'text-readability',
                   'page': ''}])
         compare(readability.main(msg_info=['W8001']),
