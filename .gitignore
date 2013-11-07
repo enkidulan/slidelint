@@ -39,3 +39,4 @@ nosetests.xml
 *.sublime-project
 *.sublime-workspace
 
+src/slidelint/LanguageTool/
