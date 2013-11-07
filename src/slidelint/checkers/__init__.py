@@ -1,0 +1,1 @@
+""" slidelint build-in checkers """

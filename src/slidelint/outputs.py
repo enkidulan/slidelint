@@ -6,69 +6,89 @@ import sys
 from colorama import Fore
 
 import logging
-user_messages = logging.getLogger('user_messages')
+USER_MESSAGES = logging.getLogger('user_messages')
 
-class BaseReporter():
+
+def encoding_normalazer(messages):
+    """ encodes message report text to utf-8 """
+    for msg in messages:
+        for key, value in msg.items():
+            if isinstance(value, basestring):
+                value = value.encode('utf-8')
+            msg[key] = value
+        yield msg
+
+
+class BaseReporter(object):
+    """ Basic class for creating reports from raw checks results"""
     only_full_id = False
     header = ["********************** Slide Deck {path}"]
     footer = [""]
+    formatter = None
 
     def __init__(self, show_id, mute_ids, path):
         self.show_id = self.only_full_id or show_id
         self.mute_ids = mute_ids
         self.path = path
-        self.update_title(path)
+        self.update_title()
 
-    def update_title(self, path):
+    def update_title(self):
+        """ setts title of report """
         self.header[0] = self.header[0].format(path=self.path)
 
     def preformatfix(self, msg):
+        """ update result message message data """
         msg['msg_id'] = msg['id'][0] if not self.show_id else msg['id']
         msg['path'] = self.path
         return msg
 
     def apply_formating(self, messages):
-        def encoding_normalazer(messages):
-            for msg in messages:
-                for k, v in msg.items():
-                    msg[k] = v.encode('utf-8') if isinstance(v, basestring) else v
-                yield msg
-        return [self.formatter.format(**msg) for msg in encoding_normalazer(messages)]
+        """ formats report messages """
+        return [self.formatter.format(**msg)
+                for msg in encoding_normalazer(messages)]
 
     def __call__(self, report):
-        filtred = [self.preformatfix(msg) for msg in report if msg['id'] not in self.mute_ids]
+        filtred = [self.preformatfix(msg)
+                   for msg in report if msg['id'] not in self.mute_ids]
         fixed_isd = [self.preformatfix(msg) for msg in filtred]
-        return "\n".join(self.header + self.apply_formating(fixed_isd) + self.footer) + "\n"
+        rez = self.header + self.apply_formating(fixed_isd) + self.footer
+        return "\n".join(rez) + "\n"
 
 
 class TextReporter(BaseReporter):
+    """ Text reporter """
     formatter = '{msg_id}:{page}: {msg} ({msg_name})'
 
 
 class ParseableTextReporter(BaseReporter):
+    """ Parseable Text reporter """
     only_full_id = True
     formatter = '{path}:{page}: [{msg_id}({msg_name}), ] {msg}'
 
 
 class VSTextReporter(BaseReporter):
+    """ VS Text reporter """
     only_full_id = True
     formatter = '{path}({page}): [{msg_id}({msg_name})] {msg}'
 
 
 class ColorizedTextReporter(BaseReporter):
+    """ Colorized Text reporter """
     formatter = '{msg_id}:{page}: {msg} ({msg_name})'
     COLOR_MAPPING = {
-        'C': Fore.RED,
+        'C': Fore.RED,  # pylint: disable=E1101
         'W': "",
     }
 
     def apply_formating(self, messages):
-        return [self.COLOR_MAPPING.get(msg['id'][0], "") + self.formatter.format(**msg) + Fore.RESET
+        # pylint: disable=E1101
+        return [self.COLOR_MAPPING.get(msg['id'][0], "") +
+                self.formatter.format(**msg) + Fore.RESET
                 for msg in messages]
 
 
 class HTMLTextReporter(BaseReporter):
-    # TODO: add fancy JS formatter like in robotframework
+    """ HTML Text reporter """
     formatter = '{msg_id}:{page}: {msg} ({msg_name})'
     only_full_id = True
     header = [
@@ -80,11 +100,12 @@ class HTMLTextReporter(BaseReporter):
         "</body>",
         "</html>"]
 
-    def update_title(self, path):
+    def update_title(self):
         self.header[-1] = self.header[-1] % self.path
 
     def apply_formating(self, messages):
-        return ['<p>' + self.formatter.format(**msg) +'</p>' for msg in messages]
+        return ['<p>' + self.formatter.format(**msg) + '</p>'
+                for msg in messages]
 
 
 REPORTERS_MAPING = {
@@ -95,7 +116,8 @@ REPORTERS_MAPING = {
     'html': HTMLTextReporter}
 
 
-def output_handler(path, rezults, mute_ids=[], format='text', report_file=False, show_id=False):
+def output_handler(path, rezults, mute_ids='', format='text',
+                   report_file=False, show_id=False):
     """
     Formating check results and handling its output.
     Takes:
@@ -111,19 +133,23 @@ def output_handler(path, rezults, mute_ids=[], format='text', report_file=False,
         * report_file - store report to file or to sys.stdout, report file
           will be stored in the work directory with same name as checking
           target file but with prefix '.lintrez'. Options : True|False
-        * show_id - show or not full message id in report('W' of 'W0101'): True|Fasle
+        * show_id - show or not full message id in report('W' of 'W0101'):
+                    True|Fasle
     """
     # raw format for testing purposes or some other level of communication
     if format == 'raw':
         return rezults
     if format not in REPORTERS_MAPING:
-        user_messages.info("No '%s' formatter found(use one of '%s'), using text formating",
-                           format, REPORTERS_MAPING.keys())
-    formater = REPORTERS_MAPING.get(format, TextReporter)(show_id, mute_ids, path)
+        USER_MESSAGES.info(
+            "No '%s' formatter found(use one of '%s'), using text formating",
+            format,
+            REPORTERS_MAPING.keys())
+    formater = REPORTERS_MAPING.get(format, TextReporter)(
+        show_id, mute_ids, path)
     formated_report = formater(rezults)
     if report_file:
         name = path.rsplit(os.path.sep, 1)[1][:-3] + 'lintrez'
-        with open(name, 'wb') as f:
-            f.write(formated_report)
+        with open(name, 'wb') as output_file:
+            output_file.write(formated_report)
     else:
         sys.stdout.write(formated_report)

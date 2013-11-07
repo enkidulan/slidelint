@@ -1,6 +1,8 @@
-import logging.config as __logging_config
+""" Reads in PDF of presentation slides and checks common problems,
+outputs a summary report on the problems. """
+
+import logging.config as _logging_config
 import os.path
 
-__here = os.path.dirname(os.path.abspath(__file__))
-
-__logging_config.fileConfig(os.path.join(__here, 'logging.conf'))
+_logging_config.fileConfig(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logging.conf'))

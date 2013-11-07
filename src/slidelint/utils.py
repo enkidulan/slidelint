@@ -1,34 +1,39 @@
+""" Bunch of helping classes and functions """
 from multiprocessing import Process, Queue
 
 import logging
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
-def help(messages, msg_ids):
+def help_wrapper(messages, msg_ids):
+    """ helps to format messages output """
     rez = list(messages) if msg_ids == 'All'else \
-        [m for m in messages if m['id'] in msg_ids]
-    for m in rez:
-        m['page'] = ""
-        m['msg'] = m['help']
+        [msg for msg in messages if msg['id'] in msg_ids]
+    for msg in rez:
+        msg['page'] = ""
+        msg['msg'] = msg['help']
     return rez
 
 
-class MultiprocessingManager():
+def processes_wrapper(queue, funk, kwargs):
+    """ helper for getting results from different processes """
+    try:
+        rez = funk(**kwargs)
+        queue.put(rez)
+    except Exception, msg:
+        LOGGER.error(msg)
+        queue.put([])
+
+
+class MultiprocessingManager(object):
     """ class for handling multiprocessing run """
     def __init__(self, debug=False):
         self.poll = []
         self.debug = debug
 
     def append(self, func, kwargs):
+        """ append function and its args to poll """
         self.poll.append((func, kwargs))
-
-    def wrapper(self, queue, funk, kwargs):
-        try:
-            rez = funk(**kwargs)
-            queue.put(rez)
-        except Exception, msg:
-            logger.error(msg)
-            queue.put([])
 
     def __iter__(self):
         if self.debug:
@@ -40,10 +45,12 @@ class MultiprocessingManager():
             processes = []
             for func, kwargs in self.poll:
                 queue = Queue()
-                processes.append(Process(target=self.wrapper, args=(queue, func, kwargs)))
+                processes.append(
+                    Process(target=processes_wrapper,
+                            args=(queue, func, kwargs)))
                 queues.append(queue)
-            for p in processes:
-                p.start()
+            for process in processes:
+                process.start()
             for checker_rez in queues:
                 for rez in checker_rez.get():
                     yield rez

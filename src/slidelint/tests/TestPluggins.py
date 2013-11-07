@@ -41,25 +41,29 @@ class TestSequenceFunctions(unittest.TestCase):
         testfixtures.compare(rez, should_be)
 
     def test_disable_category(self):
-        rez = self.handler.load_checkers(disabled_categories=['CategoryA', 'CategoryD'])
+        rez = self.handler.load_checkers(
+            disabled_categories=['CategoryA', 'CategoryD'])
         should_be = REZ_ENTRIES[3:6]
         testfixtures.compare(rez, should_be)
 
     def test_enable_checker(self):
-        rez = self.handler.load_checkers(disabled_categories=['AllCategories'],
-                                         checkers=['checkera', 'checkere'])
+        rez = self.handler.load_checkers(
+            disabled_categories=['AllCategories'],
+            checkers=['checkera', 'checkere'])
         should_be = [REZ_ENTRIES[0], REZ_ENTRIES[4]]
         testfixtures.compare(rez, should_be)
 
     def test_disable_checker(self):
-        rez = self.handler.load_checkers(disabled_checkers=['checkera', 'checkerf', 'checkerg'])
+        rez = self.handler.load_checkers(
+            disabled_checkers=['checkera', 'checkerf', 'checkerg'])
         should_be = REZ_ENTRIES[1:5]
         testfixtures.compare(rez, should_be)
 
     def test_mixed(self):
-        rez = self.handler.load_checkers(categories=['CategoryA', 'CategoryB', 'CategoryD'],
-                                         disabled_categories=['CategoryA'],
-                                         checkers=['checkerb', 'checkerf'],
-                                         disabled_checkers=['checkere', 'checkerg'])
+        rez = self.handler.load_checkers(
+            categories=['CategoryA', 'CategoryB', 'CategoryD'],
+            disabled_categories=['CategoryA'],
+            checkers=['checkerb', 'checkerf'],
+            disabled_checkers=['checkere', 'checkerg'])
         should_be = [REZ_ENTRIES[3], REZ_ENTRIES[1], REZ_ENTRIES[5]]
         testfixtures.compare(rez, should_be)

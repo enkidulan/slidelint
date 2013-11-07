@@ -1,17 +1,19 @@
 """ Checker for determining text in danger zones around edges """
-from slidelint.utils import help
+from slidelint.utils import help_wrapper
 from slidelint.pdf_utils import document_pages_layouts, layout_characters
 
-messages = (
+MESSAGES = (
     dict(id='C1003',
          msg_name='too-close-to-edges',
          msg='Too close to edges',
-         help="Too close to edges: Text should not appear close to the edges."),)
+         help="Too close to edges: "
+              "Text should not appear close to the edges."), )
 
 
 def main(target_file=None, msg_info=None, min_page_ratio='12'):
+    """ text in danger zones around edges checker """
     if msg_info:
-        return help(messages, msg_info)
+        return help_wrapper(MESSAGES, msg_info)
     rez = check_edges_danger_zone(target_file, min_page_ratio)
     return rez
 
@@ -41,7 +43,7 @@ def check_edges_danger_zone(path, min_page_ratio=12):
                 save_zone[3] > character.bbox[3])
             if not all(legal):
                 msg = {}
-                msg.update(messages[0])
+                msg.update(MESSAGES[0])
                 msg['page'] = 'Slide %s' % (page_num + 1)
                 rez.append(msg)
                 break

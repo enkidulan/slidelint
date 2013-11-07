@@ -12,13 +12,18 @@ Options:
   -i --include-ids       include ids in report [default: False]
   --config=<configfile>  path to configuration file
   -f <format> --output-format=<format>  Set the output format
-                                        (e.g. text,parseable,colorized,msvs,html)
-                                        [default: text]
+                                        (e.g. text,parseable,colorized,
+                                        msvs,html) [default: text]
   --files-output
-  -e <msg_ids> --enable=<msg_ids>  Enable the message, report, category or checker with the given id(s). You can either give multiple
-                                         identifier separated by comma (,) or put this option multiple time.
-  -d <msg_ids> --disable=<msg_ids>  Enable the message, report, category or checker with the given id(s). You can either give multiple
-                                          identifier separated by comma (,) or put this option multiple time.
+  -e <msg_ids> --enable=<msg_ids>  Enable the message, report, category or
+                                   checker with the given id(s). You can either
+                                   give multiple identifier separated by comma
+                                   (,) or put this option multiple time.
+  -d <msg_ids> --disable=<msg_ids>  Enable the message, report, category or
+                                    checker with the given id(s). You can
+                                    either give multiple identifier separated
+                                    by comma (,) or put this option
+                                    multiple time.
 
 """
 from docopt import docopt
@@ -28,13 +33,14 @@ from slidelint.outputs import output_handler
 from slidelint.utils import MultiprocessingManager
 
 import logging
-logger = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 def lint(target_file, config_file, output, enable_disable_ids,
          msg_info, group="slidelint.pluggins"):
     """ main function that bring all thing together: load slidelint pluggins,
-    parsing config file, handle command-line options, run checkers, handling output
+    parsing config file, handle command-line options, run checkers,
+    handling output
 
     It takes:
 
@@ -42,7 +48,8 @@ def lint(target_file, config_file, output, enable_disable_ids,
         * config_file - path to config file or None
         * output - it's a dict object for controlling results output:
             format - format of the output report, it's None
-                     or one of [text', 'parseable', 'colorized', 'msvs', 'html'],
+                     or one of [text', 'parseable', 'colorized',
+                     'msvs', 'html'],
             files_output - True or False, if True than report will be
                            written to file otherwise printed to stdout,
             ids - if True then messages ids will be added to report
@@ -63,14 +70,16 @@ def lint(target_file, config_file, output, enable_disable_ids,
         output['ids'] = True
     else:
         # run checkers
-        msg_ids = config.disable_messages  # mute messaging from appearing in report
+        # mute messaging from appearing in report
+        msg_ids = config.disable_messages
         checkers = pluggins.load_checkers(
             categories=config.categories,
-            checkers=config.checkers_isd,
+            checkers=config.checkers_ids,
             disabled_categories=config.disable_categories,
             disabled_checkers=config.disable_checkers
         )
-        rezult = MultiprocessingManager()  # lets run all checkers separately in different processes
+        # lets run all checkers separately in different processes
+        rezult = MultiprocessingManager()
         for checker in checkers:
             kwargs = {'target_file': target_file}
             kwargs.update(config.get_checker_args(checker.name))

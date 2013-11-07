@@ -86,7 +86,8 @@ class TestSequenceFunctions(unittest.TestCase):
         with TempDirectory() as d:
             os.chdir(d.path)
             output_handler(self.path, self.rezults, report_file=True)
-            compare(d.read('presentation.lintrez'),
+            compare(
+                d.read('presentation.lintrez'),
                 "********************** Slide Deck /path/to/presentation.pdf\n"
                 "W:2: message 1 (short-name-1)\n"
                 "C:4: message 4 (short-name-4)\n\n")

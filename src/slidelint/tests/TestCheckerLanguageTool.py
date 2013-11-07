@@ -13,22 +13,28 @@ class TestContentsChecker(unittest.TestCase):
         target_file = os.path.join(here, 'files', 'pdfs', 'grammar.pdf')
         rez = language_tool_checker.main(target_file=target_file)
         compare(rez,
-                [{'help': 'It would be a honour. It was only shown on ITV and no...',
+                [{'help': 'It would be a honour. It was only shown on '
+                          'ITV and no...',
                   'id': 'C2000',
-                  'msg': "misspelling - Use 'an' instead of 'a' if the following word starts with a vowel sound, e.g. 'an article', 'an hour'",
+                  'msg': 'misspelling - Use \'an\' instead of \'a\' if '
+                         'the following word starts with a vowel sound,'
+                         ' e.g. \'an article\', \'an hour\'',
                   'msg_name': 'EN_A_VS_AN',
                   'page': 'Slide 1'},
-                 {'help': 'It would be a honour. It was only shown on ITV and not B.B.C...',
+                 {'help': 'It would be a honour. It was only shown on ITV '
+                          'and not B.B.C...',
                   'id': 'C2005',
                   'msg': 'misspelling - Possible spelling mistake found',
                   'msg_name': 'MORFOLOGIK_RULE_EN_US',
                   'page': 'Slide 1'},
-                 {'help': '...would be a honour. It was only shown on ITV and not B.B.C.',
+                 {'help': '...would be a honour. It was only shown on ITV and '
+                          'not B.B.C.',
                   'id': 'C2005',
                   'msg': 'misspelling - Possible spelling mistake found',
                   'msg_name': 'MORFOLOGIK_RULE_EN_US',
                   'page': 'Slide 1'},
-                 {'help': "...t they're coats in the cloakroom I know alot about precious stones.",
+                 {'help': '...t they\'re coats in the cloakroom I know alot'
+                          ' about precious stones.',
                   'id': 'C2005',
                   'msg': 'misspelling - Possible spelling mistake found',
                   'msg_name': 'MORFOLOGIK_RULE_EN_US',

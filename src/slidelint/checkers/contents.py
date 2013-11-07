@@ -1,9 +1,9 @@
 """ No text found checker """
-#TODO: this thing also can check pages allowed range and word allowed range
-from slidelint.utils import help
+
+from slidelint.utils import help_wrapper
 from slidelint.pdf_utils import convert_pdf_to_text
 
-messages = (
+MESSAGES = (
     dict(id='W1001',
          msg_name='no-text-found',
          msg='No text found',
@@ -11,13 +11,15 @@ messages = (
 
 
 def main(target_file=None, msg_info=None):
+    """ No text found checker """
     if msg_info:
-        return help(messages, msg_info)
-    text = convert_pdf_to_text(target_file)
-    rez = []
-    if not text:
-        for m in messages:
-            page_status = {'page': ''}
-            page_status.update(m)
-            rez.append(page_status)
-    return rez
+        return help_wrapper(MESSAGES, msg_info)
+    for page in convert_pdf_to_text(target_file):
+        for paragraph in page:
+            if paragraph:
+                return []
+    return [dict(id='W1001',
+                 msg_name='no-text-found',
+                 msg='No text found',
+                 page='',
+                 help="No text found: No text found in presentation file"), ]
