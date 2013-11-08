@@ -1,4 +1,4 @@
-""" namespace helper module - it contains functions for names
+""" Namespace helper module - it contains functions for names
 validation and classification """
 import re
 
@@ -8,21 +8,24 @@ CATEGORY = re.compile(r"^[A-Z][a-zA-Z]+$")
 
 
 def valid_category_id(name):
-    """ validate category name """
+    """ Validate category name, in case of invalid name NameError
+    exception will be raised """
     if not CATEGORY.match(name):
         raise NameError("Id '%s' is not allowed for category" % name)
     return name
 
 
 def valid_checker_id(name):
-    """ validate checker name """
+    """ Validate checker name, in case of invalid name NameError
+    exception will be raised """
     if not CHECKER.match(name):
         raise NameError("Id '%s' is not allowed for checker" % name)
     return name
 
 
 def valid_message_id(name):
-    """ validate message name """
+    """ Validate message name, in case of invalid name NameError
+    exception will be raised """
     if not MESSAGE.match(name):
         raise NameError("Id '%s' is not allowed for message" % name)
     return name
@@ -36,7 +39,10 @@ VALIDATORS_MAPPING = {
 
 
 def validate_ids(validator_name, names):
-    """ name space validator"""
+    """ Utility for validating list of same type names,
+    it takes validator_name string(message, checker, category) and list of
+    names to validate, in case of invalid name NameError exception will be
+    raised"""
     validator = VALIDATORS_MAPPING[validator_name]
     for name in names:
         validator(name)

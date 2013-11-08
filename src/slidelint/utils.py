@@ -20,7 +20,8 @@ def processes_wrapper(queue, funk, kwargs):
     try:
         rez = funk(**kwargs)
         queue.put(rez)
-    except Exception, msg:
+    # there is a need to catch all possible exceptions
+    except Exception, msg:  # pylint: disable=W0703
         LOGGER.error(msg)
         queue.put([])
 

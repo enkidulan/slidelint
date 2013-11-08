@@ -82,9 +82,9 @@ class TextColorExtractor(object):
         }
 
 
-def get_text_color_and_background(text_colors, page_layout,
-                                  page_background):
+def get_text_color_and_background(text_colors, page_layout, page_background):
     """ yields character text, color and background """
+    # pylint: disable=R0914
     for characters in layout_characters(page_layout):
         text_set = [i._text for i in characters]  # pylint: disable=W0212
         first = ''.join(text_colors['text']).find(''.join(text_set))

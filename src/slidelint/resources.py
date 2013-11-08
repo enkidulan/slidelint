@@ -8,7 +8,7 @@ Checker = namedtuple('Checker', ['name', 'category', 'check'])
 
 class PlugginsHandler(object):
     """Loads all entry points from pkg_resources that belongs to the group,
-    by default - slidelint.pluggins"""
+    (by default slidelint.pluggins)"""
 
     def __init__(self, group="slidelint.pluggins"):
         """Construct list of all entry_points belongs to the group

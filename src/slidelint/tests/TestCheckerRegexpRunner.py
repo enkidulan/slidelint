@@ -15,13 +15,13 @@ class TestRegexGrammarChecker(unittest.TestCase):
             'target_file': target_file,
             'source_file': 'gendered_pronouns',
             're_options': 'IGNORECASE',
-            'id': 'W2000',
+            'msg_id': 'W2000',
             'msg_name': 'gender-mention',
             'msg': 'Gender Mention',
-            'help': 'Gendered pronouns are those that indicate gender: '
-                    'he, she, him, her, hers, his, himself and herself. '
-                    'All others, like "it, "one," and "they," are gender'
-                    ' neutral.'}
+            'msg_help': 'Gendered pronouns are those that indicate gender: '
+                        'he, she, him, her, hers, his, himself and herself. '
+                        'All others, like "it, "one," and "they," are gender'
+                        ' neutral.'}
         rez = regex_grammar_checker.main(**kwargs)
         compare(rez,
                 [{u'help': u'Gendered pronouns are those that indicate gender:'
@@ -48,12 +48,13 @@ class TestRegexGrammarChecker(unittest.TestCase):
             'msg_info': 'All',
             'source_file': 'gendered_pronouns',
             're_options': 'IGNORECASE',
-            'id': 'W2000',
+            'msg_id': 'W2000',
             'msg_name': 'gender-mention',
             'msg': 'Gender Mention',
-            'help': 'Gendered pronouns are those that indicate gender: he, '
-                    'she, him, her, hers, his, himself and herself. All '
-                    'others, like "it, "one," and "they," are gender neutral.'}
+            'msg_help': 'Gendered pronouns are those that indicate gender: he,'
+                        ' she, him, her, hers, his, himself and herself. All '
+                        'others, like "it, "one," and "they," are gender '
+                        'neutral.'}
         help_msgs = regex_grammar_checker.main(**kwargs)
         compare(help_msgs,
                 [{'help': 'Gendered pronouns are those that indicate gender:'

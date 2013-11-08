@@ -38,9 +38,9 @@ LOGGER = logging.getLogger(__name__)
 
 def lint(target_file, config_file, output, enable_disable_ids,
          msg_info, group="slidelint.pluggins"):
-    """ main function that bring all thing together: load slidelint pluggins,
-    parsing config file, handle command-line options, run checkers,
-    handling output
+    """ main function that bring all thing together: loads slidelint pluggins,
+    parses config file, handles command-line options, runs checkers and
+    formats output.
 
     It takes:
 
@@ -90,7 +90,8 @@ def lint(target_file, config_file, output, enable_disable_ids,
 
 def cli():
     """
-    User command line interface handler function
+    User command line interface handler - parses command-line options and
+    run linting
     """
     args = docopt(__doc__)
     target_file = args['FILE']

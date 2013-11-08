@@ -47,7 +47,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_parseable_format(self):
         with OutputCapture() as output:
-            output_handler(self.path, self.rezults, format='parseable')
+            output_handler(self.path, self.rezults, output_format='parseable')
         output.compare(
             "********************** Slide Deck /path/to/presentation.pdf\n"
             "/path/to/presentation.pdf:2: [W1010(short-name-1), ] message 1\n"
@@ -55,7 +55,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_msvs_format(self):
         with OutputCapture() as output:
-            output_handler(self.path, self.rezults, format='msvs')
+            output_handler(self.path, self.rezults, output_format='msvs')
         output.compare(
             "********************** Slide Deck /path/to/presentation.pdf\n"
             "/path/to/presentation.pdf(2): [W1010(short-name-1)] message 1\n"
@@ -63,7 +63,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_colorized_format(self):
         with OutputCapture() as output:
-            output_handler(self.path, self.rezults, format='colorized')
+            output_handler(self.path, self.rezults, output_format='colorized')
         output.compare(
             "********************** Slide Deck /path/to/presentation.pdf\n"
             "W:2: message 1 (short-name-1)\x1b[39m\n"
@@ -71,7 +71,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_html_format(self):
         with OutputCapture() as output:
-            output_handler(self.path, self.rezults, format='html')
+            output_handler(self.path, self.rezults, output_format='html')
         output.compare(
             "<!DOCTYPE html>\n"
             "<html>\n"

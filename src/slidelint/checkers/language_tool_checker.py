@@ -611,7 +611,7 @@ class LanguagetoolServer(object):
     def __enter__(self):
         return self.grammar_checker
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
         if not self.keep_alive:
             os.kill(self.pid, 9)
 

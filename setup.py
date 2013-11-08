@@ -120,8 +120,7 @@ setup(name='slidelint',
                     'nose-selecttests',
                     'coverage',
                     'fabric',
-                    'pep8',
-                    'pylint']
+                    ]
       },
       package_data = {'':['default.cfg', 'logging.conf', 'checkers/regex_rules/gendered_pronouns']},
       zip_safe=False,

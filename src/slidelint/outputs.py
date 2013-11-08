@@ -1,5 +1,5 @@
 """
-Output handler and formatters
+Output handlers and formatters
 """
 import os
 import sys
@@ -116,7 +116,7 @@ REPORTERS_MAPING = {
     'html': HTMLTextReporter}
 
 
-def output_handler(path, rezults, mute_ids='', format='text',
+def output_handler(path, rezults, mute_ids='', output_format='text',
                    report_file=False, show_id=False):
     """
     Formating check results and handling its output.
@@ -127,8 +127,9 @@ def output_handler(path, rezults, mute_ids='', format='text',
                   'page': '2',
                   'msg': 'message 1',
                   'msg_name': 'short-name-1'}, ...]
-        * format - output format(in case of unknown format the default 'text'
-                   will be applied) : text|parseable|colorized|msvs|html
+        * output_format - output format(in case of unknown format
+                          the default 'text' will be applied) :
+                          text|parseable|colorized|msvs|html
         * mute_ids - messages ids to not include in report: ['W1010', 'C2345']
         * report_file - store report to file or to sys.stdout, report file
           will be stored in the work directory with same name as checking
@@ -137,14 +138,14 @@ def output_handler(path, rezults, mute_ids='', format='text',
                     True|Fasle
     """
     # raw format for testing purposes or some other level of communication
-    if format == 'raw':
+    if output_format == 'raw':
         return rezults
-    if format not in REPORTERS_MAPING:
+    if output_format not in REPORTERS_MAPING:
         USER_MESSAGES.info(
             "No '%s' formatter found(use one of '%s'), using text formating",
-            format,
+            output_format,
             REPORTERS_MAPING.keys())
-    formater = REPORTERS_MAPING.get(format, TextReporter)(
+    formater = REPORTERS_MAPING.get(output_format, TextReporter)(
         show_id, mute_ids, path)
     formated_report = formater(rezults)
     if report_file:
