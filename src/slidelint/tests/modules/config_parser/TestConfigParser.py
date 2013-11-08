@@ -28,7 +28,7 @@ class TestSequenceFunctions(unittest.TestCase):
     def test_dummy_config(self):
 
         path = os.path.join(
-            here, 'files', 'configurations', 'simple_enabling_disabling.cfg')
+            here, 'simple_enabling_disabling.cfg')
         config = config_parser.LintConfig(path)
         compare(config.categories,
                 ['AllCategories'])
@@ -45,7 +45,7 @@ class TestSequenceFunctions(unittest.TestCase):
 
     def test_detailed_config(self):
         path = os.path.join(
-            here, 'files', 'configurations', 'detailed_config.cfg')
+            here, 'detailed_config.cfg')
         config = config_parser.LintConfig(path)
         compare(config.categories,
                 ['CategoryC'])
@@ -56,7 +56,7 @@ class TestSequenceFunctions(unittest.TestCase):
                 ['checker_a'])
 
     def test_mixed_config(self):
-        path = os.path.join(here, 'files', 'configurations', 'mixed.cfg')
+        path = os.path.join(here, 'mixed.cfg')
         config = config_parser.LintConfig(path)
         compare(config.categories,
                 ['CategoryC'])

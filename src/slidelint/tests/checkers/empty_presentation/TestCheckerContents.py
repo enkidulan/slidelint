@@ -12,7 +12,7 @@ class TestContentsChecker(unittest.TestCase):
     def test_file_without_text(self):
         for prefix in ('GD', 'LO'):
             target_file = os.path.join(
-                here, 'files', 'pdfs', prefix+'_empty_presentation.pdf')
+                here, prefix+'_empty_presentation.pdf')
             rez = contents.main(target_file=target_file)
             compare(
                 rez,
@@ -26,7 +26,7 @@ class TestContentsChecker(unittest.TestCase):
     def test_file_with_text(self):
         for prefix in ('GD', 'LO'):
             target_file = os.path.join(
-                here, 'files', 'pdfs', prefix+'_simple_text_presentation.pdf')
+                here, prefix+'_simple_text_presentation.pdf')
             rez = contents.main(target_file=target_file)
             compare(rez, [])
 

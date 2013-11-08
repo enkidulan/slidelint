@@ -32,7 +32,7 @@ class TestFontSizeChecker(unittest.TestCase):
     def test_file_with_small_text(self):
         for prefix in ('GD', 'LO'):
             target_file = os.path.join(
-                here, 'files', 'pdfs', prefix+'_small_text.pdf')
+                here, prefix+'_small_text.pdf')
             rez = fontsize.main(target_file=target_file)
             compare(rez,
                     [dict(id='C1002', msg_name='font-to-small',
@@ -45,7 +45,7 @@ class TestFontSizeChecker(unittest.TestCase):
     def test_file_with_large_text(self):
         for prefix in ('GD', 'LO'):
             target_file = os.path.join(
-                here, 'files', 'pdfs', prefix+'_simple_text_presentation.pdf')
+                here, prefix+'_simple_text_presentation.pdf')
             rez = fontsize.main(target_file=target_file)
             compare(rez, [])
 

@@ -11,8 +11,7 @@ class TestLinterRunner(unittest.TestCase):
     def setUp(self):
         self.kwargs = {
             'target_file': '/path/to/presentation.pdf',
-            'config_file': os.path.join(here, 'files',
-                                        'configurations', 'test_models.cfg'),
+            'config_file': os.path.join(here, 'test_models.cfg'),
             'output': {'format': 'raw', 'files_output': False, 'ids': True},
             'enable_disable_ids': (None, None),
             'msg_info': None,

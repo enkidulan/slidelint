@@ -10,8 +10,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 class TestContentsChecker(unittest.TestCase):
 
     def test_readability(self):
-        target_file = os.path.join(
-            here, 'files', 'pdfs', 'text_redability.pdf')
+        target_file = os.path.join(here, 'text_redability.pdf')
         rez = readability.main(target_file=target_file)
         compare(
             rez,

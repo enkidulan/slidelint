@@ -151,8 +151,8 @@ setup(name='slidelint',
       ContentQuality.regex_grammar_checker = slidelint.checkers.regex_grammar_checker:main
 
       [slidelint.tests]
-      TestGroupOne.test_cheker_1 = slidelint.tests.files.test_modules:group1_cheker1
-      TestGroupOne.test_cheker_2 = slidelint.tests.files.test_modules:group1_cheker2
-      TestGroupTwo.test_cheker_3 = slidelint.tests.files.test_modules:group2_cheker1
+      TestGroupOne.test_cheker_1 = slidelint.tests.modules.linter.test_modules:group1_cheker1
+      TestGroupOne.test_cheker_2 = slidelint.tests.modules.linter.test_modules:group1_cheker2
+      TestGroupTwo.test_cheker_3 = slidelint.tests.modules.linter.test_modules:group2_cheker1
       """,
       )

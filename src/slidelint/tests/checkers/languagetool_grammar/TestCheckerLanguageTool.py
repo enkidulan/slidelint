@@ -10,7 +10,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 class TestContentsChecker(unittest.TestCase):
 
     def test_language_tool_checker(self):
-        target_file = os.path.join(here, 'files', 'pdfs', 'grammar.pdf')
+        target_file = os.path.join(here, 'grammar.pdf')
         rez = language_tool_checker.main(target_file=target_file)
         compare(rez,
                 [{'help': 'It would be a honour. It was only shown on '

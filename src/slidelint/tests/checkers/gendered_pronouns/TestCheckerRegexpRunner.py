@@ -10,7 +10,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 class TestRegexGrammarChecker(unittest.TestCase):
 
     def test_regex_grammar_checker(self):
-        target_file = os.path.join(here, 'files', 'pdfs', 'gender.pdf')
+        target_file = os.path.join(here, 'gender.pdf')
         kwargs = {
             'target_file': target_file,
             'source_file': 'gendered_pronouns',
