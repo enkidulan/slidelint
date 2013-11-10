@@ -526,7 +526,7 @@ MESSAGES_BY_RULES = {m['msg_name']: m for m in MESSAGES}
 
 
 def get_free_port():
-    """ return unused port number"""
+    """ returns unused port number"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
     sock.bind(('', 0))
     sock.listen(socket.SOMAXCONN)

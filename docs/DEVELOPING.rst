@@ -49,8 +49,8 @@ How to write a new test case?
 *****************************
 
 Just follow instructions that you can find at
-http://docs.python.org/2/library/unittest.html and put it into one of
-subdirectories of src/slidelint/tests directory.
+http://docs.python.org/2/library/unittest.html and put your file with
+test case into one of subdirectories of src/slidelint/tests directory.
 
 
 ***************************
@@ -80,6 +80,3 @@ Also a lot of helpful information you can find here -
 https://help.github.com/articles/syncing-a-fork
 
 For detail information about how to use git look here http://githowto.com/
-
-
-
