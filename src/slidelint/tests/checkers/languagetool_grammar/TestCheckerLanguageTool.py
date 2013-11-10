@@ -1,9 +1,9 @@
 """
 The languagetool_grammar.pdf file contain slides with grammar issues.
 
-The tests are checks:
-  1. that help messages are provided
-  2. that languagetool find grammar issues
+The tests check:
+  1. whether help messages are provided
+  2. whether languagetool finds grammar issues
 """
 import os.path
 import unittest

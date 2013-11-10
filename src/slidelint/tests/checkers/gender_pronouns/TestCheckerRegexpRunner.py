@@ -1,12 +1,12 @@
 """
 The *_gender_pronouns.pdf files have 4 slides which contain slides, where:
-   * 1 and 3 slides have gender mention
-   * 2 and 4 slides are gender neutral
+   * slides 1 and 3 have gender pronouns
+   * slides 2 and 4 are gender neutral
 
-The tests are checks:
-  1. that help messages are provided
-  2. that the check for 1 and 3 slides are fails
-  3. that the check for 2 and 4 slides are passes
+The tests check:
+  1. whether help messages are provided
+  2. whether the checking of slides 1 and 3 fail
+  3. whether the checking of slides 2 and 4 pass
 
 """
 import os.path

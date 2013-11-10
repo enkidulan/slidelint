@@ -1,11 +1,11 @@
 """
-The *_empty_presentation.pdf files contain a no text at all.
+The *_empty_presentation.pdf files contain no text at all.
 The *_presentation_with_content.pdf files contain some text.
 
-The tests are checks:
-  1. that help messages are provided
-  2. that checks of *_empty_presentation.pdf files are fails
-  3. that checks of *_presentation_with_content.pdf files are succeeds
+The tests check:
+  1. whether help messages are provided
+  2. whether checking of *_empty_presentation.pdf files fail
+  3. whether checking of *_presentation_with_content.pdf files pass
 """
 import os.path
 import unittest

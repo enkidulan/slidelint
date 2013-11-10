@@ -1,6 +1,6 @@
 """
-The *_redability.pdf files contain slides with different text contrast to
-background color:
+The *_redability.pdf files contain slides with different text color
+contrasting to the background:
   1. bad text contrast(non gray-scale) - should fail with default args
   2. good text contrast(gray on white, gray on black) - should pass with
      default args
@@ -10,17 +10,17 @@ background color:
   6. white almost crossed white and black almost crossed black - should
      pass with default args
   7. black crossed black too much - should fail with default args
-  8. white text on whitish image - should fail with default args
-  9. white text with background on whitish image - should pass with
+  8. white text on light image - should fail with default args
+  9. white text with background on light image - should pass with
      default args
-  10. black text on blackish image - should fail with default args
-  11. black text with background on blackish image - should pass with
+  10. black text on dark image - should fail with default args
+  11. black text with background on dark image - should pass with
       default args
 
-The tests are checks:
-  * that help messages are provided
-  * that checks with default agrs work correctly
-  * that checker args can be changed
+The tests check:
+  * whether help messages are provided
+  * whether checks with default agrs work correctly
+  * whether checker args can be changed
 
 """
 import os.path

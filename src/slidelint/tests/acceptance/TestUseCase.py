@@ -4,7 +4,7 @@ import testfixtures
 import tempdir
 from fabric import api
 
-here = os.path.dirname(os.path.abspath(__file__))
+here = os.path.dirname(os.path.abspath(__file__)                                    )
 
 
 def run(*arg, **kwargs):

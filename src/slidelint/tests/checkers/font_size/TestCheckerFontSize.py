@@ -1,23 +1,22 @@
 """
-The *_font_gradient.pdf files have 16 slides which contain a different
+The *_font_gradient.pdf files have 16 slides that contain a different
 sized text:
-   * the firs slide contain 1/1 sized text - the text have same hide with
-     its page
-   * the firs slide contain 1/2 sized text - the text twice smaller than
-     its page
+   * the first slide contains 1/1 sized text - the text is as high as
+     the page
+   * the second slide contains 1/2 sized text - the text is twice smaller than
+     the page
    * ...
-     but still too close for default allowed value
-   * the firs slide contain 1/16 sized text - the sixteen lines can be placed
-     on page one upon other
+   * the 16th slide contains 1/16 sized text - the sixteen lines can be
+   fit in the page
 
-The tests are checks:
-  1. that help messages are provided
-  2. that with default size value(1/6) the checks of 7..16 slides are fails
-  3. that with custom size value 1/7 the checks of 8..16 slides are fails
-  4. that with custom size value 1/10 the checks of 11..16 slides are fails
-  5. that with custom size value 1/16 the checks of all slides are passes
+The tests check:
+  1. whether help messages are provided
+  2. whether with default size value(1/6) the checks of 7..16 slides fail
+  3. whether with custom size value 1/7 the checks of 8..16 slides fail
+  4. whether with custom size value 1/10 the checks of 11..16 slides fail
+  5. whether with custom size value 1/16 the checks of all slides pass
 
-Also this check depends on font type and its features.
+Also this checking depends on the font type and its features.
 """
 import os.path
 import unittest

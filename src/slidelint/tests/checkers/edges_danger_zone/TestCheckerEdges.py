@@ -1,17 +1,15 @@
 """
 The *_edges_danger_zone.pdf files have 6 slides, all of them contain a text
-which is attached to some of page edge and have some rotation:
-   * at 1 and 3 slides text are really close to the edges
-   * at 2 and 4 slides text are not so close to edges as at 1 and 3
+which is attached to some of the page edges and have some rotation:
+   * in slides 1 and 3 text is really close to the edges
+   * in slides 2 and 4 text is not so close to edges as in 1 and 3
      but still too close for default allowed value
-   * at 5 and 6 slides text are perfectly far away from the page edges
+   * in slides 5 and 6 text is just far enough from the page edges
 
-The tests are checks:
-  1. that help messages are provided
-  2. that with default edges danger zone value the checks of
-     1,2,3 and 4 slides are fails
-  3. that with custom edges danger zone value which allows text to be more
-     close to the edges the checks fails only for 1 and 3 slides
+The tests check:
+  1. whether the help messages are provided
+  2. whether the slides 1,2,3 and 4 fail
+  3. whether the slides 1,3,5 and 6 pass with non-default arguments
 """
 import os.path
 import unittest
