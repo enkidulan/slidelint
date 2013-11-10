@@ -6,8 +6,9 @@ MESSAGES = (
     dict(id='C1003',
          msg_name='too-close-to-edges',
          msg='Too close to edges',
-         help="Too close to edges: "
-              "Text should not appear close to the edges."), )
+         help='Too close to edges: Text should not appear '
+              'closer than 1/12th(by default) of the'
+              ' page size to the edges.'), )
 
 
 def main(target_file=None, msg_info=None, min_page_ratio='12'):
@@ -42,9 +43,16 @@ def check_edges_danger_zone(path, min_page_ratio=12):
                 save_zone[2] > character.bbox[2],
                 save_zone[3] > character.bbox[3])
             if not all(legal):
-                msg = {}
-                msg.update(MESSAGES[0])
-                msg['page'] = 'Slide %s' % (page_num + 1)
-                rez.append(msg)
+                rez.append({
+                    'id': 'C1003',
+                    'page': 'Slide %s' % (page_num + 1),
+                    'msg_name': 'too-close-to-edges',
+                    'msg': 'Too close to edges: Text should not appear '
+                           'closer than 1/%sth of the page size '
+                           'to the edges.' % min_page_ratio,
+                    'help': 'Too close to edges: Text should not appear '
+                    'closer than 1/12th(by default) of the'
+                    ' page size to the edges.'}
+                )
                 break
     return rez
