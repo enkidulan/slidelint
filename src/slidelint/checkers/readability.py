@@ -131,10 +131,11 @@ def html_color_to_grayscale(colorstring):
 
 class VisibilityChecker(object):
     """ class for comparing character color to its background"""
-    def __init__(self, scale=1, cross_range=50):
-        self.scale = 1 / scale
+    def __init__(self, scale_regress=1, cross_range=50, scale_waight=1):
+        self.scale_regress = scale_regress
+        self.scale_waight = scale_waight
         self.cross_range = cross_range
-        self.exp_scale = [exp(i/10.0) ** self.scale
+        self.exp_scale = [exp(i/10.0) ** self.scale_regress
                           for i in range(1, self.cross_range + 1)]
 
     def _colors_slice_sum(self, colors_slice):
@@ -156,21 +157,23 @@ class VisibilityChecker(object):
             imap(self._colors_slice_sum,
                  (left_colors_slice[::-1], right_colors_slice))
         )
-        weight = main_color + similar_colors
+        weight = main_color + similar_colors * self.scale_waight
         similarity = weight / total_colors
         return similarity
 
 
-def main(target_file=None, msg_info=None, scale=1,
-         max_similarity=0.1, cross_range=50):
+def main(target_file=None, msg_info=None, scale_regress=0.4,
+         max_similarity=0.1, cross_range=70, scale_waight=2):
     """ Text readability checker"""
     if msg_info:
         return help_wrapper(MESSAGES, msg_info)
-    scale = float(scale)
+    scale_regress = float(scale_regress)
+    scale_waight = float(scale_waight)
     max_similarity = float(max_similarity)
     cross_range = int(cross_range)
     rez = []
-    visibility_checker = VisibilityChecker(scale, cross_range)
+    visibility_checker = VisibilityChecker(
+        scale_regress, cross_range, scale_waight)
     for page_num, page_data in goes_throught_pages(target_file):
         for character_color, background in page_data:
             similarity = visibility_checker(character_color, background)
