@@ -1,3 +1,12 @@
+"""
+The *_empty_presentation.pdf files contain a no text at all.
+The *_presentation_with_content.pdf files contain some text.
+
+The tests are checks:
+  1. that help messages are provided
+  2. that checks of *_empty_presentation.pdf files are fails
+  3. that checks of *_presentation_with_content.pdf files are succeeds
+"""
 import os.path
 import unittest
 from testfixtures import compare
@@ -10,7 +19,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 class TestContentsChecker(unittest.TestCase):
 
     def test_file_without_text(self):
-        for prefix in ('GD', 'LO'):
+        for prefix in ('libreoffice', 'msoffice'):
             target_file = os.path.join(
                 here, prefix+'_empty_presentation.pdf')
             rez = contents.main(target_file=target_file)
@@ -24,9 +33,9 @@ class TestContentsChecker(unittest.TestCase):
             )
 
     def test_file_with_text(self):
-        for prefix in ('GD', 'LO'):
+        for prefix in ('libreoffice', 'msoffice'):
             target_file = os.path.join(
-                here, prefix+'_simple_text_presentation.pdf')
+                here, prefix+'_presentation_with_content.pdf')
             rez = contents.main(target_file=target_file)
             compare(rez, [])
 

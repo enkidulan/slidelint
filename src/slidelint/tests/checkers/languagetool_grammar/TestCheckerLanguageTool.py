@@ -1,3 +1,10 @@
+"""
+The languagetool_grammar.pdf file contain slides with grammar issues.
+
+The tests are checks:
+  1. that help messages are provided
+  2. that languagetool find grammar issues
+"""
 import os.path
 import unittest
 from testfixtures import compare
@@ -7,34 +14,34 @@ from slidelint.checkers import language_tool_checker
 here = os.path.dirname(os.path.abspath(__file__))
 
 
-class TestContentsChecker(unittest.TestCase):
+class TestLibreofficeChecker(unittest.TestCase):
 
-    def test_language_tool_checker(self):
-        target_file = os.path.join(here, 'grammar.pdf')
+    def test_language_tool_checker_libreffice(self):
+        target_file = os.path.join(
+            here, 'languagetool_grammar.pdf')
         rez = language_tool_checker.main(target_file=target_file)
         compare(rez,
-                [{'help': 'It would be a honour. It was only shown on '
-                          'ITV and no...',
+                [{'help': 'It would be a honour.',
                   'id': 'C2000',
                   'msg': 'misspelling - Use \'an\' instead of \'a\' if '
                          'the following word starts with a vowel sound,'
                          ' e.g. \'an article\', \'an hour\'',
                   'msg_name': 'EN_A_VS_AN',
                   'page': 'Slide 1'},
-                 {'help': 'It would be a honour. It was only shown on ITV '
-                          'and not B.B.C...',
+                 {'help': 'It would be a honour.',
                   'id': 'C2005',
                   'msg': 'misspelling - Possible spelling mistake found',
                   'msg_name': 'MORFOLOGIK_RULE_EN_US',
                   'page': 'Slide 1'},
-                 {'help': '...would be a honour. It was only shown on ITV and '
+                 {'help': 'It was only shown on ITV and '
                           'not B.B.C.',
                   'id': 'C2005',
                   'msg': 'misspelling - Possible spelling mistake found',
                   'msg_name': 'MORFOLOGIK_RULE_EN_US',
                   'page': 'Slide 1'},
-                 {'help': '...t they\'re coats in the cloakroom I know alot'
-                          ' about precious stones.',
+                 {'help': '... they\'re coats in the cloakroom. '
+                          'I know alot about precious stones. Have '
+                          'you seen th...',
                   'id': 'C2005',
                   'msg': 'misspelling - Possible spelling mistake found',
                   'msg_name': 'MORFOLOGIK_RULE_EN_US',
