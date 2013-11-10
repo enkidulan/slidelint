@@ -68,7 +68,11 @@ Coding style
 
 Use pep8 and pylint with .pylintrc file which you can find at root
 directory. Also repository contains pre-commit hook that will check code
-quality with pylint.
+quality with pylint, to active it just do at the package root:
+
+::
+
+    $ cp pre-commit .git/hooks/
 
 **************
 How to use git
