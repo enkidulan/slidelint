@@ -7,7 +7,7 @@ MESSAGES = (
          msg_name='font-to-small',
          msg='Font is to small',
          help="Font is to small: Text should take up "
-              "a minimum of 1/6th the page."),)
+              "a minimum of 1/6th(by default) the page."),)
 
 
 def main(target_file=None, msg_info=None, min_page_ratio='6'):
@@ -29,9 +29,14 @@ def check_text_size(path, min_page_ratio='6'):
         page_size = page_layout.height
         for character in layout_characters(page_layout):
             if character.size * min_page_ratio < page_size:
-                msg = {}
-                msg.update(MESSAGES[0])
-                msg['page'] = 'Slide %s' % (page_num + 1)
-                rez.append(msg)
+                rez.append(
+                    {'id': 'C1002',
+                     'page': 'Slide %s' % (page_num + 1),
+                     'msg_name': 'font-to-small',
+                     'msg': "Font is to small: Text should take up "
+                            "a minimum of 1/%sth the page." % min_page_ratio,
+                     'help': "Font is to small: Text should take up "
+                             "a minimum of 1/6th(by default) the page."}
+                )
                 break
     return rez
