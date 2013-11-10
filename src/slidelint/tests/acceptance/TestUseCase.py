@@ -40,23 +40,37 @@ class TestAcceptance(unittest.TestCase):
                 'No config file found, using default configuration\n'
                 '********************** Slide Deck src/slidelint/tests'
                 '/acceptance/presentation3.pdf\n'
-                'C1003:Slide 12: Too close to edges: Text should not appear closer than 1/12.0th of the page size to the edges. (too-close-to-edges)\n'
+                'C1003:Slide 12: Too close to edges: Text should not '
+                'appear closer than 1/12.0th of the page size to the '
+                'edges. (too-close-to-edges)\n'
                 'C3000:Slide 9: Low text color to background contrast. '
                 '(text-readability)\n'
                 'C3000:Slide 11: Low text color to background contrast. '
                 '(text-readability)\n'
-                'C1002:Slide 1: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 2: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 3: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 4: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 5: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 6: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 7: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 8: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 9: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 10: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 11: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
-                'C1002:Slide 12: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 1: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 2: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 3: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 4: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 5: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 6: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 7: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 8: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 9: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 10: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 11: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
+                'C1002:Slide 12: Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page. (font-to-small)\n'
                 'C2002:Slide 9: typographical - This sentence does not start '
                 'with an uppercase letter (UPPERCASE_SENTENCE_START)\n'
                 'C2002:Slide 9: typographical - This sentence does not start '
@@ -90,7 +104,9 @@ class TestAcceptance(unittest.TestCase):
                 '********************** Slide Deck src/slidelint/tests/'
                 'acceptance/presentation3.pdf\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 12: '
-                '[C1003(too-close-to-edges), ] Too close to edges: Text should not appear closer than 1/12.0th of the page size to the edges.\n'
+                '[C1003(too-close-to-edges), ] Too close to edges: Text '
+                'should not appear closer than 1/12.0th of the page size'
+                ' to the edges.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 9: '
                 '[C3000(text-readability), ] Low text color to background '
                 'contrast.\n'
@@ -98,29 +114,41 @@ class TestAcceptance(unittest.TestCase):
                 '[C3000(text-readability), ] Low text color to background '
                 'contrast.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 1: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 2: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 3: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 4: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 5: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 6: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 7: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 8: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 9: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 10: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 11: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 12: '
-                '[C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.\n'
+                '[C1002(font-to-small), ] Font is to small: Text should '
+                'take up a minimum of 1/6.0th the page.\n'
                 'src/slidelint/tests/acceptance/presentation3.pdf:Slide 9: '
                 '[C2002(UPPERCASE_SENTENCE_START), ] typographical - This '
                 'sentence does not start with an uppercase letter\n'
@@ -200,12 +228,18 @@ class TestAcceptance(unittest.TestCase):
                 "<body>\n"
                 "<h1>Slide Deck src/slidelint/tests/acceptance/"
                 "presentation.pdf</h1>\n"
-                "<p>C3000:Slide 3: Low text color to background contrast. (text-readability)</p>\n"
-                "<p>C1002:Slide 1: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)</p>\n"
-                "<p>C1002:Slide 2: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)</p>\n"
-                "<p>C1002:Slide 3: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)</p>\n"
-                "<p>C1002:Slide 4: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)</p>\n"
-                "<p>C1002:Slide 5: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)</p>\n"
+                "<p>C3000:Slide 3: Low text color to background contrast. "
+                "(text-readability)</p>\n"
+                "<p>C1002:Slide 1: Font is to small: Text should take up a "
+                "minimum of 1/6.0th the page. (font-to-small)</p>\n"
+                "<p>C1002:Slide 2: Font is to small: Text should take up a "
+                "minimum of 1/6.0th the page. (font-to-small)</p>\n"
+                "<p>C1002:Slide 3: Font is to small: Text should take up a "
+                "minimum of 1/6.0th the page. (font-to-small)</p>\n"
+                "<p>C1002:Slide 4: Font is to small: Text should take up a "
+                "minimum of 1/6.0th the page. (font-to-small)</p>\n"
+                "<p>C1002:Slide 5: Font is to small: Text should take up a "
+                "minimum of 1/6.0th the page. (font-to-small)</p>\n"
                 "<p>C2005:Slide 5: misspelling - Possible spelling mistake "
                 "found (MORFOLOGIK_RULE_EN_US)</p>\n"
                 "<p>C2005:Slide 5: misspelling - Possible spelling mistake"
@@ -222,22 +256,45 @@ class TestAcceptance(unittest.TestCase):
                 rez,
                 "********************** Slide Deck src/slidelint/tests/"
                 "acceptance/presentation3.pdf\n"
-                "C:Slide 3: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
-                "C:Slide 4: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
-                "C:Slide 6: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
-                "C:Slide 7: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
-                "C:Slide 8: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
-                "C:Slide 9: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
-                "C:Slide 10: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
-                "C:Slide 11: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
-                "C:Slide 12: Too close to edges: Text should not appear closer than 1/10.0th of the page size to the edges. (too-close-to-edges)\n"
+                "C:Slide 3: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
+                "C:Slide 4: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
+                "C:Slide 6: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
+                "C:Slide 7: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
+                "C:Slide 8: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
+                "C:Slide 9: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
+                "C:Slide 10: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
+                "C:Slide 11: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
+                "C:Slide 12: Too close to edges: Text should not appear closer"
+                " than 1/10.0th of the page size to the edges."
+                " (too-close-to-edges)\n"
                 "C:Slide 11: Low text color to background contrast."
                 " (text-readability)\n"
-                "C:Slide 6: Font is to small: Text should take up a minimum of 1/36.0th the page. (font-to-small)\n"
-                "C:Slide 7: Font is to small: Text should take up a minimum of 1/36.0th the page. (font-to-small)\n"
-                "C:Slide 8: Font is to small: Text should take up a minimum of 1/36.0th the page. (font-to-small)\n"
-                "C:Slide 9: Font is to small: Text should take up a minimum of 1/36.0th the page. (font-to-small)\n"
-                "C:Slide 11: Font is to small: Text should take up a minimum of 1/36.0th the page. (font-to-small)\n"
+                "C:Slide 6: Font is to small: Text should take up a "
+                "minimum of 1/36.0th the page. (font-to-small)\n"
+                "C:Slide 7: Font is to small: Text should take up a "
+                "minimum of 1/36.0th the page. (font-to-small)\n"
+                "C:Slide 8: Font is to small: Text should take up a "
+                "minimum of 1/36.0th the page. (font-to-small)\n"
+                "C:Slide 9: Font is to small: Text should take up a "
+                "minimum of 1/36.0th the page. (font-to-small)\n"
+                "C:Slide 11: Font is to small: Text should take up a "
+                "minimum of 1/36.0th the page. (font-to-small)\n"
                 "W:Slide 10: Gender Mention: \" him\" mentioned in "
                 "\"PICTURE WITH \n"
                 "CAPTION LAYOUT \n"

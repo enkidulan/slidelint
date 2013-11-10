@@ -31,24 +31,24 @@ class TestRegexGrammarChecker(unittest.TestCase):
                 'msg_id': 'W2000',
                 'msg_name': 'gender-mention',
                 'msg': 'Gender Mention',
-                'msg_help': 'Gendered pronouns are those that indicate gender: '
-                            'he, she, him, her, hers, his, himself and herself. '
-                            'All others, like "it, "one," and "they," are gender'
-                            ' neutral.'}
+                'msg_help': 'Gendered pronouns are those that indicate '
+                            'gender: he, she, him, her, hers, his, himself '
+                            'and herself. All others, like "it, "one," '
+                            'and "they," are gender neutral.'}
             rez = regex_grammar_checker.main(**kwargs)
             compare(rez,
-                    [{u'help': u'Gendered pronouns are those that indicate gender:'
-                               ' he, she, him, her, hers, his, himself and '
-                               'herself. All others, like "it, "one," and "they,"'
-                               ' are gender neutral.',
+                    [{u'help': u'Gendered pronouns are those that indicate '
+                               'gender: he, she, him, her, hers, his, '
+                               'himself and herself. All others, like "it, '
+                               '"one," and "they," are gender neutral.',
                       u'id': u'W2000',
                       u'msg': u'Gender Mention: " guys!" mentioned '
                               'in "Hello guys!"',
                       u'msg_name': u'gender-mention',
                       'page': 'Slide 1'},
-                     {u'help': u'Gendered pronouns are those that indicate gender:'
-                               ' he, she, him, her, hers, his, himself and '
-                               'herself. All others, like "it, "one," and'
+                     {u'help': u'Gendered pronouns are those that indicate '
+                               'gender: he, she, him, her, hers, his, himself '
+                               'and herself. All others, like "it, "one," and'
                                ' "they," are gender neutral.',
                       u'id': u'W2000',
                       u'msg': u'Gender Mention: "He " mentioned in "He wrote'
