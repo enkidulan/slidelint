@@ -42,11 +42,23 @@ def tranform2html(source, dist, out_name='out.html'):
            source, outpath]
     process = subprocess.Popen(
         cmd,
-        stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
         universal_newlines=True,)
-    process.wait()
+    output = []
+    while True:
+        output.append(process.stdout.readline())
+        retcode = process.poll()
+        if process.returncode == 0:
+            break
+        elif retcode is not None:
+            output.extend(process.stdout.readlines())
+            output.insert(
+                0,
+                "pdftohtml died with exit code %s!\n" % retcode
+            )
+            output.insert(1, " ".join(cmd) + "\n")
+            raise IOError("".join(output))
     files = os.listdir(dist)
     files.sort()
     files.pop(files.index(out_name))
