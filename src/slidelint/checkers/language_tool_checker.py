@@ -542,7 +542,6 @@ def start_languagetool_server(lt_path, config_file):
            'org.languagetool.server.HTTPServer', '--port', port]
     process = subprocess.Popen(
         cmd,
-        stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         universal_newlines=True,)
