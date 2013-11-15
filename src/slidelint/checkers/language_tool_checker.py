@@ -617,7 +617,10 @@ class LanguagetoolServer(object):
 
 def new_lines_replaser(strgin):
     """ string clean up function for language-tool server """
-    return strgin.replace(' \n', ' ').replace('\n ', ' ').replace('\n', ' ')
+    return strgin.replace(' \n',
+        ' ').replace('\n ',
+        ' ').replace('\n',
+        ' ').replace('  ', ' ')
 
 
 def main(target_file=None, msg_info=None, keep_alive='False'):

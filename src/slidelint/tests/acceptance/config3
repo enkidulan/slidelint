@@ -8,7 +8,6 @@ enable =
 category = Text
 enable =
     contents
-    fontsize
     edges_danger_zone
     readability
 
@@ -16,7 +15,6 @@ enable =
 [ContentQualityCheckers]
 category = ContentQuality
 enable =
-    language_tool_checker
     gendered_pronouns
 
 
@@ -24,26 +22,18 @@ enable =
 checker = contents
 
 
-[fontsize]
-checker = fontsize
-min_page_ratio = 6
-
-
 [edges_danger_zone]
 checker = edges_danger_zone
-min_page_ratio = 16
+min_page_ratio = 8
 
 
 [readability]
 checker = readability
 scale_regress = 0.4
-max_similarity = 0.1
+max_similarity = 0.05
 cross_range = 70
 scale_waight = 2
 
-[language_tool_checker]
-checker = language_tool_checker
-keep_alive = true
 
 [gendered_pronouns]
 checker = regex_grammar_checker

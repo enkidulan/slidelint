@@ -1,0 +1,19 @@
+[CATEGORIES]
+enable =
+    TextCheckers
+    ContentQualityCheckers
+
+
+[TextCheckers]
+category = Text
+enable =
+    contents
+    fontsize
+    edges_danger_zone
+    readability
+
+
+[ContentQualityCheckers]
+category = ContentQuality
+enable =
+    language_tool_checker

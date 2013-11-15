@@ -1,0 +1,6 @@
+********************** Slide Deck /home/enki/projects/slidelint/src/slidelint/tests/acceptance/good_presentation.pdf
+C:Slide 1: Too close to edges: Text should not appear closer than 1/8.0th of the page size to the edges. (too-close-to-edges)
+C:Slide 2: Too close to edges: Text should not appear closer than 1/8.0th of the page size to the edges. (too-close-to-edges)
+C:Slide 3: Too close to edges: Text should not appear closer than 1/8.0th of the page size to the edges. (too-close-to-edges)
+C:Slide 4: Too close to edges: Text should not appear closer than 1/8.0th of the page size to the edges. (too-close-to-edges)
+C:Slide 5: Too close to edges: Text should not appear closer than 1/8.0th of the page size to the edges. (too-close-to-edges)

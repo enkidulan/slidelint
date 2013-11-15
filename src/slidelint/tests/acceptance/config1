@@ -16,6 +16,7 @@ enable =
 [ContentQualityCheckers]
 category = ContentQuality
 enable =
+    language_tool_checker
     gendered_pronouns
 
 
@@ -25,20 +26,24 @@ checker = contents
 
 [fontsize]
 checker = fontsize
-min_page_ratio = 36
+min_page_ratio = 24
 
 
 [edges_danger_zone]
 checker = edges_danger_zone
-min_page_ratio = 10
+min_page_ratio = 20
 
 
 [readability]
 checker = readability
-scale_regress = 0.8
+scale_regress = 0.4
 max_similarity = 0.1
-cross_range = 60
+cross_range = 70
+scale_waight = 2
 
+[language_tool_checker]
+checker = language_tool_checker
+keep_alive = true
 
 [gendered_pronouns]
 checker = regex_grammar_checker
