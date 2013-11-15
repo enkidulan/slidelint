@@ -14,41 +14,42 @@ from slidelint.checkers import language_tool_checker
 here = os.path.dirname(os.path.abspath(__file__))
 
 
-class Test_Languagetool_Checker(unittest.TestCase):
+def subprocess_helper(temp_dir, cmd):
+    config_file = os.path.join(temp_dir.path, 'tmp_file')
+    import subprocess
+    origing_popen = subprocess.Popen
+    with Replacer() as r:
+        def not_existing_program(*args, **kwargs):
+            return origing_popen(cmd, *args[1:], **kwargs)
+        r.replace('subprocess.Popen', not_existing_program)
+        language_tool_checker.start_languagetool_server(
+            temp_dir.path, config_file)
 
-    def subprocess_testing_helper(self, temp_dir, cmd):
-        config_file = os.path.join(temp_dir.path, 'tmp_file')
-        import subprocess
-        origing_popen = subprocess.Popen
-        with Replacer() as r:
-            def not_existing_program(*args, **kwargs):
-                return origing_popen(cmd, *args[1:], **kwargs)
-            r.replace('subprocess.Popen', not_existing_program)
-            language_tool_checker.start_languagetool_server(
-                temp_dir.path, config_file)
+
+class Test_Languagetool_Checker(unittest.TestCase):
 
     @tempdir()
     def test_languagetool_server_fails(self, temp_dir):
         # Program doesn't exist
         with ShouldRaise(OSError):
-            self.subprocess_testing_helper(
+            subprocess_helper(
                 temp_dir,
                 ['not_existing_program', '/tmp'])
         # Program fails to work
         with ShouldRaise(IOError):
-            self.subprocess_testing_helper(temp_dir, ['python', '-c', '5/0'])
+            subprocess_helper(temp_dir, ['python', '-c', '5/0'])
         # Program segfaults
         with ShouldRaise(IOError):
-            self.subprocess_testing_helper(
+            subprocess_helper(
                 temp_dir,
                 ['python', '-c',
                  'import signal; import sys; sys.exit(signal.SIGSEGV)'])
         # Server started message don't appeared
         with ShouldRaise(IOError):
-            self.subprocess_testing_helper(
+            subprocess_helper(
                 temp_dir,
                 ['python', '-c', 'print "Something goes wrong"'])
-        self.subprocess_testing_helper(
+        subprocess_helper(
             temp_dir,
             ['python', '-c', 'print "Server started"'])
 

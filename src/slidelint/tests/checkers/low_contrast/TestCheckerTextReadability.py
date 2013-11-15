@@ -34,7 +34,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 
 class TestContentsChecker(unittest.TestCase):
 
-    def subprocess_testing_helper(self, temp_dir, cmd):
+    def subprocess_helper(self, temp_dir, cmd):
         config_file = os.path.join(temp_dir.path, 'tmp_file')
         import subprocess
         origing_popen = subprocess.Popen
@@ -50,15 +50,15 @@ class TestContentsChecker(unittest.TestCase):
     def test_pdftohtml_fails(self, temp_dir):
         # Program doesn't exist
         with ShouldRaise(OSError):
-            self.subprocess_testing_helper(
+            self.subprocess_helper(
                 temp_dir, ['not_existing_program', '/tmp'])
         # Program fails to work
         with ShouldRaise(IOError):
-            self.subprocess_testing_helper(
+            self.subprocess_helper(
                 temp_dir, ['python', '-c', '5/0'])
         # Program segfaults
         with ShouldRaise(IOError):
-            self.subprocess_testing_helper(
+            self.subprocess_helper(
                 temp_dir,
                 ['python', '-c',
                  'import signal; import sys; sys.exit(signal.SIGSEGV)'])
