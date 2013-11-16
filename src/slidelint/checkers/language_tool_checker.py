@@ -563,6 +563,10 @@ def start_languagetool_server(lt_path, config_file):
                 "languagetool-server died with exit code %s!\n" % retcode
             )
             output.insert(1, " ".join(cmd) + "\n")
+            output.append("\nLanguageTool requires Java 7 or later."
+                          " Please check and update java version."
+                          " For more details look at "
+                          "https://help.ubuntu.com/community/Java"\n")
             raise IOError("".join(output))
     return port, pid
 
