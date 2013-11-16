@@ -29,12 +29,12 @@ class TestAcceptance(unittest.TestCase):
     def setUp(self):
         self.dir = os.getcwd()
 
-    # def test_pip_instalation(self):
-    #     with tempdir.TempDir() as t:
-    #         with api.lcd(t):
-    #             run("virtualenv --no-site-packages .")
-    #             run("bin/pip install https://github.com/enkidulan/"
-    #                 "slidelint/archive/master.tar.gz")
+    def test_pip_instalation(self):
+        with tempdir.TempDir() as t:
+            with api.lcd(t):
+                run("virtualenv --no-site-packages .")
+                run("bin/pip install https://github.com/enkidulan/"
+                    "slidelint/archive/master.tar.gz")
 
     def test_info_option(self):
         with api.lcd(self.dir):
