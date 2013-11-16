@@ -1,1 +1,1 @@
-********************** Slide Deck /home/enki/projects/slidelint/src/slidelint/tests/acceptance/good_presentation.pdf
+********************** Slide Deck good_presentation.pdf

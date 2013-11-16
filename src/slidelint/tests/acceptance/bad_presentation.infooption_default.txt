@@ -1,5 +1,5 @@
 No config file found, using default configuration
-********************** Slide Deck /home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf
+********************** Slide Deck bad_presentation.pdf
 C1003:Slide 1: Too close to edges: Text should not appear closer than 1/16.0th of the page size to the edges. (too-close-to-edges)
 C3000:Slide 3: Low text color to background contrast. (text-readability)
 C1002:Slide 1: Font is to small: Text should take up a minimum of 1/6.0th the page. (font-to-small)

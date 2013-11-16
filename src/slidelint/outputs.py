@@ -29,7 +29,7 @@ class BaseReporter(object):
     def __init__(self, show_id, mute_ids, path):
         self.show_id = self.only_full_id or show_id
         self.mute_ids = mute_ids
-        self.path = path
+        self.path = os.path.split(path)[1]
         self.update_title()
 
     def update_title(self):
@@ -149,7 +149,7 @@ def output_handler(path, rezults, mute_ids='', output_format='text',
         show_id, mute_ids, path)
     formated_report = formater(rezults)
     if report_file:
-        name = path.rsplit(os.path.sep, 1)[1][:-3] + 'lintrez'
+        name = os.path.split(path)[1][:-3] + 'lintrez'
         with open(name, 'wb') as output_file:
             output_file.write(formated_report)
     else:

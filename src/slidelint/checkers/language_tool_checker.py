@@ -566,7 +566,7 @@ def start_languagetool_server(lt_path, config_file):
             output.append("\nLanguageTool requires Java 7 or later."
                           " Please check and update java version."
                           " For more details look at "
-                          "https://help.ubuntu.com/community/Java"\n")
+                          "http://help.ubuntu.com/community/Java\n")
             raise IOError("".join(output))
     return port, pid
 

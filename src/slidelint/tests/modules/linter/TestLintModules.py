@@ -10,7 +10,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 class TestLinterRunner(unittest.TestCase):
     def setUp(self):
         self.kwargs = {
-            'target_file': '/path/to/presentation.pdf',
+            'target_file': 'presentation.pdf',
             'config_file': os.path.join(here, 'test_models.cfg'),
             'output': {'format': 'raw', 'files_output': False, 'ids': True},
             'enable_disable_ids': (None, None),
@@ -62,7 +62,7 @@ class TestLinterRunner(unittest.TestCase):
         with OutputCapture() as output:
             lint(**self.kwargs)
         output.compare(
-            "********************** Slide Deck /path/to/presentation.pdf\n"
+            "********************** Slide Deck presentation.pdf\n"
             "W1010:: warning message with id W1010 (warning-W1010)\n"
             "C1011:: warning message with id C1011 (critical-C1011)\n"
             "W1020:: warning message with id W1020 (warning-W1020)\n"

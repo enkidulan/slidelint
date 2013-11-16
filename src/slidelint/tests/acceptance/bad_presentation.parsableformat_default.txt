@@ -1,12 +1,12 @@
 No config file found, using default configuration
-********************** Slide Deck /home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 1: [C1003(too-close-to-edges), ] Too close to edges: Text should not appear closer than 1/16.0th of the page size to the edges.
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 3: [C3000(text-readability), ] Low text color to background contrast.
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 1: [C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 2: [C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 3: [C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 4: [C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 2: [C2005(MORFOLOGIK_RULE_EN_US), ] misspelling - Possible spelling mistake found
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 2: [C2000(IT_IS), ] misspelling - Did you mean 'its' (possessive pronoun) instead of 'it's' (=it is)?
-/home/enki/projects/slidelint/src/slidelint/tests/acceptance/bad_presentation.pdf:Slide 4: [W4000(gender-mention), ] Gender Mention: " he " mentioned in "Ask the student whether he is 
+********************** Slide Deck bad_presentation.pdf
+bad_presentation.pdf:Slide 1: [C1003(too-close-to-edges), ] Too close to edges: Text should not appear closer than 1/16.0th of the page size to the edges.
+bad_presentation.pdf:Slide 3: [C3000(text-readability), ] Low text color to background contrast.
+bad_presentation.pdf:Slide 1: [C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.
+bad_presentation.pdf:Slide 2: [C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.
+bad_presentation.pdf:Slide 3: [C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.
+bad_presentation.pdf:Slide 4: [C1002(font-to-small), ] Font is to small: Text should take up a minimum of 1/6.0th the page.
+bad_presentation.pdf:Slide 2: [C2005(MORFOLOGIK_RULE_EN_US), ] misspelling - Possible spelling mistake found
+bad_presentation.pdf:Slide 2: [C2000(IT_IS), ] misspelling - Did you mean 'its' (possessive pronoun) instead of 'it's' (=it is)?
+bad_presentation.pdf:Slide 4: [W4000(gender-mention), ] Gender Mention: " he " mentioned in "Ask the student whether he is 
 prepared to give a presentation."
