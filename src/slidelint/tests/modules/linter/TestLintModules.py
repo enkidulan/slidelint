@@ -1,10 +1,42 @@
 import os.path
 import unittest
-from testfixtures import OutputCapture, compare
+from testfixtures import OutputCapture, compare, ShouldRaise
 
 from slidelint.cli import lint
+from slidelint.utils import MultiprocessingManager
+from slidelint.tests.modules.linter.test_modules import exeption_raising_func
 
 here = os.path.dirname(os.path.abspath(__file__))
+
+
+class TestMultiprocessingManager(unittest.TestCase):
+    def test_bad_args(self):
+        mltprsm = MultiprocessingManager()
+        mltprsm.append(exeption_raising_func, {'x': 0})
+        exp = IOError(
+            "The function 'exeption_raising_func' of "
+            "'slidelint.tests.modules.linter.test_modules' module raised an "
+            "Exception:\nexeption_raising_func() got an unexpected keyword"
+            " argument 'x'",)
+        with ShouldRaise(exp):
+            [i for i in mltprsm]
+
+    def test_exeption(self):
+        mltprsm = MultiprocessingManager()
+        mltprsm.append(exeption_raising_func, {'arg': 0})
+        exp = IOError(
+            "The function 'exeption_raising_func' of "
+            "'slidelint.tests.modules.linter.test_modules' module"
+            " raised an Exception:\ninteger division or modulo by zero")
+        with ShouldRaise(exp):
+            [i for i in mltprsm]
+
+    def test_rezult(self):
+        mltprsm = MultiprocessingManager()
+        mltprsm.append(exeption_raising_func, {'arg': 1.0})
+        mltprsm.append(exeption_raising_func, {'arg': 2.0})
+        mltprsm.append(exeption_raising_func, {'arg': 4.0})
+        compare([1.0, 0.5, 0.25], [i for i in mltprsm])
 
 
 class TestLinterRunner(unittest.TestCase):
