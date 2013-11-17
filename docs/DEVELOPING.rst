@@ -44,7 +44,7 @@ The **modules** directory provides test cases to make sure that all other
 things not related to checkers work correctly. It contains tests for
 output formatter, configuration file parser, ...
 
-For more details take a look at /src/slidelint/tests/Readme.rst file.
+For more details take a look at **/src/slidelint/tests/Readme.rst** file.
 
 *****************************
 How to write a new test case?

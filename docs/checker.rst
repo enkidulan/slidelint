@@ -90,9 +90,8 @@ file that should be checked) and msg_info(can be False - which means do checks;
              msg='Message',
              help="Message help"),)
 
+    @help_wrapper(messages)
     def main(target_file=None, msg_info=None, custom_arg='default_value'):
-        if msg_info:
-            return help(messages, msg_info)
         return some_check(target_file, custom_arg)
 
 
