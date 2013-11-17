@@ -10,10 +10,9 @@ MESSAGES = (
          help="No text found: No text found in presentation file"),)
 
 
-def main(target_file=None, msg_info=None):
+@help_wrapper(MESSAGES)
+def main(target_file=None, ):
     """ No text found checker """
-    if msg_info:
-        return help_wrapper(MESSAGES, msg_info)
     for page in convert_pdf_to_text(target_file):
         for paragraph in page:
             if paragraph:

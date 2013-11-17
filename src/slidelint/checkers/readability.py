@@ -174,11 +174,10 @@ class VisibilityChecker(object):
         return similarity
 
 
-def main(target_file=None, msg_info=None, scale_regress=0.4,
+@help_wrapper(MESSAGES)
+def main(target_file=None, scale_regress=0.4,
          max_similarity=0.1, cross_range=70, scale_waight=2):
     """ Text readability checker"""
-    if msg_info:
-        return help_wrapper(MESSAGES, msg_info)
     scale_regress = float(scale_regress)
     scale_waight = float(scale_waight)
     max_similarity = float(max_similarity)

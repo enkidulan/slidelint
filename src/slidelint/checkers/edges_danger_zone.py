@@ -11,10 +11,9 @@ MESSAGES = (
               ' page size to the edges.'), )
 
 
-def main(target_file=None, msg_info=None, min_page_ratio='12'):
+@help_wrapper(MESSAGES)
+def main(target_file=None, min_page_ratio='12'):
     """ text in danger zones around edges checker """
-    if msg_info:
-        return help_wrapper(MESSAGES, msg_info)
     rez = check_edges_danger_zone(target_file, min_page_ratio)
     return rez
 

@@ -3,7 +3,7 @@ messages and regexps are defined in the config file"""
 # pylint: disable=R0914
 import re
 import os.path
-from slidelint.utils import help_wrapper as help_msg_formatter
+from slidelint.utils import provide_help as help_msg_formatter
 from slidelint.pdf_utils import convert_pdf_to_text
 
 HERE = os.path.dirname(os.path.abspath(__file__))

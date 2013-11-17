@@ -10,10 +10,9 @@ MESSAGES = (
               "a minimum of 1/6th(by default) the page."),)
 
 
-def main(target_file=None, msg_info=None, min_page_ratio='6'):
+@help_wrapper(MESSAGES)
+def main(target_file=None, min_page_ratio='6'):
     """ font size checker """
-    if msg_info:
-        return help_wrapper(MESSAGES, msg_info)
     rez = check_text_size(target_file, min_page_ratio)
     return rez
 

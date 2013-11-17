@@ -627,11 +627,10 @@ def new_lines_replaser(strgin):
         ' ').replace('  ', ' ')
 
 
-def main(target_file=None, msg_info=None, keep_alive='False'):
+@help_wrapper(MESSAGES)
+def main(target_file=None, keep_alive='False'):
     """ language tool based grammar checker """
     keep_alive = keep_alive.lower() == 'true'
-    if msg_info:
-        return help_wrapper(MESSAGES, msg_info)
     pages = convert_pdf_to_text(target_file)
     rez = []
     with LanguagetoolServer(LT_PATH, keep_alive) as grammar_checker:

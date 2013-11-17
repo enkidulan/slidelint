@@ -19,6 +19,10 @@ messages_g2_c1 = (
          msg='warning message with id C2011', help="full help message"))
 
 
+def exeption_raising_func(arg):
+    return [1/arg]
+
+
 def group1_cheker1(target_file=None, msg_info=None, arg1=None, arg2=None):
     messages = messages_g1_c1
     if msg_info:

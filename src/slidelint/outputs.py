@@ -9,16 +9,6 @@ import logging
 USER_MESSAGES = logging.getLogger('user_messages')
 
 
-def encoding_normalazer(messages):
-    """ encodes message report text to utf-8 """
-    for msg in messages:
-        for key, value in msg.items():
-            if isinstance(value, basestring):
-                value = value.encode('utf-8')
-            msg[key] = value
-        yield msg
-
-
 class BaseReporter(object):
     """ Basic class for creating reports from raw checks results"""
     only_full_id = False
@@ -45,7 +35,7 @@ class BaseReporter(object):
     def apply_formating(self, messages):
         """ formats report messages """
         return [self.formatter.format(**msg)
-                for msg in encoding_normalazer(messages)]
+                for msg in messages]
 
     def __call__(self, report):
         filtred = [self.preformatfix(msg)
