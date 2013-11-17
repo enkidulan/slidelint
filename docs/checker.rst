@@ -77,8 +77,8 @@ file that should be checked) and msg_info(can be False - which means do checks;
  'All' - return me all help messages you have; or list of ids - return me only
  messages that are in this list if you have some).
 
- There are help_wrapper in slidelint.utils so you cat use it for help-messages
- handing or write your own:
+ There are help_wrapper in slidelint.utils so you can use it for help-messages
+ handing, in this case you also can omit msg_info argument:
 
 ::
 
@@ -91,7 +91,7 @@ file that should be checked) and msg_info(can be False - which means do checks;
              help="Message help"),)
 
     @help_wrapper(messages)
-    def main(target_file=None, msg_info=None, custom_arg='default_value'):
+    def main(target_file=None, custom_arg='default_value'):
         return some_check(target_file, custom_arg)
 
 
