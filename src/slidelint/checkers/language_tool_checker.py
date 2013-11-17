@@ -619,12 +619,10 @@ class LanguagetoolServer(object):
             os.kill(self.pid, 9)
 
 
-def new_lines_replaser(strgin):
+def new_lines_replaser(string):
     """ string clean up function for language-tool server """
-    return strgin.replace(' \n',
-        ' ').replace('\n ',
-        ' ').replace('\n',
-        ' ').replace('  ', ' ')
+    string = string.replace(' \n', ' ').replace('\n ', ' ')
+    return string.replace('\n', ' ').replace('  ', ' ')
 
 
 @help_wrapper(MESSAGES)

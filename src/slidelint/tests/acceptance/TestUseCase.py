@@ -14,6 +14,7 @@ config3 = os.path.join(here, 'config3')
 
 REBASE = False
 
+
 def run(*arg, **kwargs):
     kwargs['capture'] = True
     try:
@@ -65,7 +66,8 @@ class TestAcceptance(unittest.TestCase):
             rez = run("bin/slidelint -i -f colorized -d C1002,ContentQuality"
                       ",edges_danger_zone -e "
                       "language_tool_checker %s" % bad_presentation)
-            rez_file = bad_presentation[:-3] + 'cmdlineenablingdisabling_default.txt'
+            rez_file =\
+                bad_presentation[:-3] + 'cmdlineenablingdisabling_default.txt'
             if REBASE:
                 with open(rez_file, 'wb') as f:
                     f.write(rez)
@@ -76,7 +78,8 @@ class TestAcceptance(unittest.TestCase):
 
     def test_file_output_file(self):
         with api.lcd(self.dir):
-            rez = run("bin/slidelint -f html --files-output  %s" % bad_presentation)
+            rez = run("bin/slidelint -f html --files-output  "
+                      "%s" % bad_presentation)
             testfixtures.compare(
                 rez,
                 "No config file found, using default configuration")
@@ -92,13 +95,17 @@ class TestAcceptance(unittest.TestCase):
 
     def test_custom_config_file(self):
         with api.lcd(self.dir):
-            presentations = (good_presentation, not_so_bad_presentation, bad_presentation)
+            presentations = (
+                good_presentation,
+                not_so_bad_presentation,
+                bad_presentation)
             configs = (config1, config2, config3)
             for presentation in presentations:
                 for config in configs:
-                    config_suf =  config.rsplit(os.path.sep, 1)[1] + '.txt'
+                    config_suf = config.rsplit(os.path.sep, 1)[1] + '.txt'
                     rez_file = presentation[:-3] + config_suf
-                    rez = run("bin/slidelint --config=%s %s" % (config, presentation))
+                    rez = run("bin/slidelint --config=%s "
+                              "%s" % (config, presentation))
                     if REBASE:
                         with open(rez_file, 'wb') as f:
                             f.write(rez)
@@ -111,6 +118,5 @@ if __name__ == '__main__':
     import sys
     if 'rebaseline' in sys.argv:
         del sys.argv[sys.argv.index('rebaseline')]
-        global REBASE
         REBASE = True
     unittest.main()
