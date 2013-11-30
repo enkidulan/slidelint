@@ -7,21 +7,16 @@ The tests check:
 """
 import os.path
 import unittest
-from testfixtures import compare, Replacer, tempdir, ShouldRaise
+from testfixtures import compare, tempdir, ShouldRaise
 
 from slidelint.checkers import language_tool_checker
+from slidelint.tests.utils import subprocess_context_helper
 
 here = os.path.dirname(os.path.abspath(__file__))
 
 
 def subprocess_helper(temp_dir, cmd):
-    config_file = os.path.join(temp_dir.path, 'tmp_file')
-    import subprocess
-    origing_popen = subprocess.Popen
-    with Replacer() as r:
-        def not_existing_program(*args, **kwargs):
-            return origing_popen(cmd, *args[1:], **kwargs)
-        r.replace('subprocess.Popen', not_existing_program)
+    with subprocess_context_helper(temp_dir, cmd) as config_file:
         language_tool_checker.start_languagetool_server(
             temp_dir.path, config_file)
 

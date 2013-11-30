@@ -25,40 +25,35 @@ The tests check:
 """
 import os.path
 import unittest
-from testfixtures import compare, ShouldRaise, tempdir, Replacer
+from testfixtures import compare, ShouldRaise, tempdir
 
 from slidelint.checkers import readability
+from slidelint.tests.utils import subprocess_context_helper
 
 here = os.path.dirname(os.path.abspath(__file__))
 
 
+def subprocess_helper(temp_dir, cmd):
+    with subprocess_context_helper(temp_dir, cmd) as config_file:
+        readability.tranform2html(
+            temp_dir.path,
+            temp_dir.path, config_file)
+
+
 class TestContentsChecker(unittest.TestCase):
-
-    def subprocess_helper(self, temp_dir, cmd):
-        config_file = os.path.join(temp_dir.path, 'tmp_file')
-        import subprocess
-        origing_popen = subprocess.Popen
-        with Replacer() as r:
-            def not_existing_program(*args, **kwargs):
-                return origing_popen(cmd, *args[1:], **kwargs)
-            r.replace('subprocess.Popen', not_existing_program)
-            readability.tranform2html(
-                temp_dir.path,
-                temp_dir.path, config_file)
-
     @tempdir()
     def test_pdftohtml_fails(self, temp_dir):
         # Program doesn't exist
         with ShouldRaise(OSError):
-            self.subprocess_helper(
+            subprocess_helper(
                 temp_dir, ['not_existing_program', '/tmp'])
         # Program fails to work
         with ShouldRaise(IOError):
-            self.subprocess_helper(
+            subprocess_helper(
                 temp_dir, ['python', '-c', '5/0'])
         # Program segfaults
         with ShouldRaise(IOError):
-            self.subprocess_helper(
+            subprocess_helper(
                 temp_dir,
                 ['python', '-c',
                  'import signal; import sys; sys.exit(signal.SIGSEGV)'])
