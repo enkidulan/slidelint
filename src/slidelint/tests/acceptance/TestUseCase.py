@@ -27,15 +27,29 @@ def run(*arg, **kwargs):
 
 class TestAcceptance(unittest.TestCase):
 
+    # this setUpClass and tearDownClass creating a new venv and install
+    # slidelint with pip from your local copy of slidelint sources, so all
+    # tests of this testsute will be executed inside this venv;
+    # to make this active comment setUp function
+    # and uncomment setUpClass and tearDownClass methods.
+    # You need to use this testsute setup with creating new venv only in case
+    # of changes in setup.py file.
+    # @classmethod
+    # def setUpClass(cls):
+    #     cls.location = tempdir.TempDir()
+    #     cls.dir = cls.location.name
+    #     package_location = os.getcwd()
+    #     venv_location = os.path.join(package_location, 'bin', 'virtualenv')
+    #     with api.lcd(cls.dir):
+    #         run("%s --no-site-packages ." % venv_location)
+    #         run("bin/pip install %s" % package_location)
+
+    # @classmethod
+    # def tearDownClass(cls):
+    #     cls.location.dissolve()
+
     def setUp(self):
         self.dir = os.getcwd()
-
-    def test_pip_instalation(self):
-        with tempdir.TempDir() as t:
-            with api.lcd(t):
-                run("virtualenv --no-site-packages .")
-                run("bin/pip install https://github.com/enkidulan/"
-                    "slidelint/archive/master.tar.gz")
 
     def test_info_option(self):
         with api.lcd(self.dir):
