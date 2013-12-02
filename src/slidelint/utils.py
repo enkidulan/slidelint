@@ -1,4 +1,7 @@
 """ Bunch of helping classes and functions """
+import os
+import subprocess
+import threading
 from multiprocessing import Process, Queue
 
 import logging
@@ -87,3 +90,71 @@ class MultiprocessingManager(object):
                     yield rez
             for process in processes:
                 process.join()
+
+
+class TimeoutError(Exception):
+    """ Timeout Error Exception Class """
+    pass
+
+
+class SubprocessTimeoutHelper(object):
+    """ Helper class for adding timeout for subprocess calls """
+
+    def __init__(self, cmd, timeout=30):
+        self.cmd = cmd
+        self.timeout = timeout
+        self.process = None
+        self.output = []
+        self.exception = None
+
+    def subprocess_handler(self):
+        """ the actual code """
+        self.process = subprocess.Popen(
+            self.cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,)
+        while True:
+            self.output.append(self.process.stdout.readline())
+            retcode = self.process.poll()
+            if retcode or retcode == 0:
+                break
+
+    def thread_exeptions_handler(self, *args, **kwargs):
+        """ handler for proper handling exceptions in
+        subprocess_handler thread"""
+        try:
+            self.subprocess_handler(*args, **kwargs)
+        except Exception as exception:  # pylint: disable=W0703
+            self.exception = exception
+
+    def __call__(self, *args, **kwargs):
+        # creating threading
+        thread = threading.Thread(
+            target=self.thread_exeptions_handler, args=args, kwargs=kwargs)
+        thread.start()
+        # setting timeout to thread
+        thread.join(self.timeout)
+        if self.exception:
+            # raise exception for thread
+            raise self.exception  # pylint: disable=E0702
+        if thread.is_alive():
+            # terminating and raisin TimeoutError if thread take to mush time
+            # to finish
+            self.process.terminate()
+            thread.join()
+            raise TimeoutError(
+                "%s process was terminated after %s "
+                "seconds" % (self.cmd, self.timeout))
+        retcode = self.process.returncode
+        if retcode is not None and retcode != 0:
+            # checking process return code and raising error in case it's not 0
+            self.output.extend(self.process.stdout.readlines())
+            self.output.insert(
+                0,
+                "Subprocess died with exit code"
+                " %s(%s)!\n" % (retcode, os.strerror(retcode))
+            )
+            self.output.insert(1, " ".join(self.cmd) + "\n")
+            raise IOError("".join(self.output))
+        return self.output

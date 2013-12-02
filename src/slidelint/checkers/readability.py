@@ -2,9 +2,9 @@
 from slidelint.utils import help_wrapper
 import os
 import tempdir
-import subprocess
 from lxml import html
 from slidelint.pdf_utils import document_pages_layouts
+from slidelint.utils import SubprocessTimeoutHelper
 from pdfminer.layout import LTChar, LTTextLine, LTTextBox
 from PIL import Image
 import re
@@ -40,25 +40,7 @@ def tranform2html(source, dist, out_name='out.html'):
     outpath = os.path.join(dist, out_name)
     cmd = ['pdftohtml', '-c', '-noframes', '-zoom', '1',
            source, outpath]
-    process = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        universal_newlines=True,)
-    output = []
-    while True:
-        output.append(process.stdout.readline())
-        retcode = process.poll()
-        if process.returncode == 0:
-            break
-        elif retcode is not None:
-            output.extend(process.stdout.readlines())
-            output.insert(
-                0,
-                "pdftohtml died with exit code %s!\n" % retcode
-            )
-            output.insert(1, " ".join(cmd) + "\n")
-            raise IOError("".join(output))
+    SubprocessTimeoutHelper(cmd, timeout=90)()
     files = os.listdir(dist)
     files.sort()
     files.pop(files.index(out_name))

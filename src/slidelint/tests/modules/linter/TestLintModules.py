@@ -1,12 +1,48 @@
+import subprocess
 import os.path
 import unittest
 from testfixtures import OutputCapture, compare, ShouldRaise
 
 from slidelint.cli import lint
 from slidelint.utils import MultiprocessingManager
+from slidelint.utils import SubprocessTimeoutHelper, TimeoutError
 from slidelint.tests.modules.linter.test_modules import exeption_raising_func
 
 here = os.path.dirname(os.path.abspath(__file__))
+
+
+class TestTimeoutHelper(unittest.TestCase):
+    def test_enternal_exp(self):
+        foo = SubprocessTimeoutHelper(['python', '-c', '2/0'], timeout=1)
+        msg = "Subprocess died with exit code 1(Operation not permitted)!\n"\
+              "python -c 2/0\n"\
+              "Traceback (most recent call last):\n"\
+              "  File \"<string>\", line 1, in <module>\n"\
+              "ZeroDivisionError: integer division or modulo by zero\n"
+        with ShouldRaise(IOError(msg)):
+            foo()
+
+    def test_timeout_exp(self):
+        cmd = ['python', '-c', 'import time; time.sleep(2); 2/0']
+        foo = SubprocessTimeoutHelper(cmd, timeout=1)
+        msg = "['python', '-c', 'import time; time.sleep(2); 2/0'] process "\
+              "was terminated after 1 seconds"
+        with ShouldRaise(TimeoutError(msg)):
+            foo()
+
+    def test_output(self):
+        cmd = ['python', '-c', 'print 2']
+        foo = SubprocessTimeoutHelper(cmd, timeout=1)
+        compare("".join(foo()), '2\n')
+
+    def test_subprocess_handler_exp(self):
+        class Foo(SubprocessTimeoutHelper):
+            def subprocess_handler(self):
+                5/0
+        foo = Foo("")
+        msg = 'integer division or modulo by zero'
+        with ShouldRaise(ZeroDivisionError(msg)):
+            foo()
 
 
 class TestMultiprocessingManager(unittest.TestCase):

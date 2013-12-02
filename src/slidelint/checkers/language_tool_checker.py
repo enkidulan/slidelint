@@ -1,5 +1,6 @@
 """ Language tool based grammar checker """
 from slidelint.utils import help_wrapper
+from slidelint.utils import SubprocessTimeoutHelper
 from slidelint.pdf_utils import convert_pdf_to_text
 import os
 import subprocess
@@ -535,39 +536,49 @@ def get_free_port():
     return str(port)
 
 
+class LanguagetoolSubprocessHandler(SubprocessTimeoutHelper):
+    """ class for setting timeout for Languagetool """
+
+    def subprocess_handler(self):
+        """ starts languagetool_server and wait until message about that it
+        ready to work appear in its logs """
+        self.process = subprocess.Popen(
+            self.cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            universal_newlines=True,)
+        # waiting for server start
+        output = []
+        while True:
+            output.append(self.process.stdout.readline())
+            if 'Server started' in output[-1]:
+                break
+
+            retcode = self.process.poll()
+            if retcode is not None:
+                output.extend(self.process.stdout.readlines())
+                output.insert(
+                    0,
+                    "languagetool-server died with exit code %s!\n" % retcode
+                )
+                output.insert(1, " ".join(self.cmd) + "\n")
+                output.append("\nLanguageTool requires Java 7 or later."
+                              " Please check and update java version."
+                              " For more details look at "
+                              "http://help.ubuntu.com/community/Java\n")
+                raise IOError("".join(output))
+
+
 def start_languagetool_server(lt_path, config_file):
     """ starts languagetool_server, returns its port and pid """
     port = get_free_port()
     cmd = ['java', '-cp', os.path.join(lt_path, 'languagetool-server.jar'),
            'org.languagetool.server.HTTPServer', '--port', port]
-    process = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        universal_newlines=True,)
-    pid = process.pid
+    lt_server = LanguagetoolSubprocessHandler(cmd, 30)
+    lt_server()
+    pid = lt_server.process.pid
     with open(config_file, 'w') as out_file:
         out_file.write("%s,%s" % (port, pid))
-    # waiting for server start
-    output = []
-    while True:
-        output.append(process.stdout.readline())
-        if 'Server started' in output[-1]:
-            break
-
-        retcode = process.poll()
-        if retcode is not None:
-            output.extend(process.stdout.readlines())
-            output.insert(
-                0,
-                "languagetool-server died with exit code %s!\n" % retcode
-            )
-            output.insert(1, " ".join(cmd) + "\n")
-            output.append("\nLanguageTool requires Java 7 or later."
-                          " Please check and update java version."
-                          " For more details look at "
-                          "http://help.ubuntu.com/community/Java\n")
-            raise IOError("".join(output))
     return port, pid
 
 
