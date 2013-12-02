@@ -97,7 +97,10 @@ class TestAcceptance(unittest.TestCase):
             testfixtures.compare(
                 rez,
                 "No config file found, using default configuration")
-            rez = run("cat bad_presentation.lintrez")
+            try:
+                rez = run("cat bad_presentation.lintrez")
+            finally:
+                run("rm -f bad_presentation.lintrez")
             rez_file = bad_presentation[:-3] + 'fileoutput_default.txt'
             if REBASE:
                 with open(rez_file, 'wb') as f:
