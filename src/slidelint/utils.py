@@ -118,6 +118,7 @@ class SubprocessTimeoutHelper(object):
             self.output.append(self.process.stdout.readline())
             retcode = self.process.poll()
             if retcode or retcode == 0:
+                self.output.extend(self.process.stdout.readlines())
                 break
 
     def thread_exeptions_handler(self, *args, **kwargs):

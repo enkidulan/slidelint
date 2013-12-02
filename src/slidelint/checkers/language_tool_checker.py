@@ -526,6 +526,21 @@ MESSAGES = (
 MESSAGES_BY_RULES = {m['msg_name']: m for m in MESSAGES}
 
 
+def get_java():
+    """ getting executable binary of java 7"""
+    cmd = ["update-alternatives", "--query", "java"]
+    try:
+        output = SubprocessTimeoutHelper(cmd)()
+    except OSError:
+        return 'java'
+    for line in output:
+        if not line.startswith("Alternative: "):
+            continue
+        if "java-7" in line:
+            return line[len("Alternative: "):].strip(" \n")
+    return 'java'
+
+
 def get_free_port():
     """ returns unused port number"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
@@ -572,7 +587,8 @@ class LanguagetoolSubprocessHandler(SubprocessTimeoutHelper):
 def start_languagetool_server(lt_path, config_file):
     """ starts languagetool_server, returns its port and pid """
     port = get_free_port()
-    cmd = ['java', '-cp', os.path.join(lt_path, 'languagetool-server.jar'),
+    java = get_java()
+    cmd = [java, '-cp', os.path.join(lt_path, 'languagetool-server.jar'),
            'org.languagetool.server.HTTPServer', '--port', port]
     lt_server = LanguagetoolSubprocessHandler(cmd, 30)
     lt_server()
