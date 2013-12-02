@@ -38,7 +38,7 @@ You can **install slide** with pip:
 
     bin/pip install https://github.com/enkidulan/slidelint/archive/master.tar.gz
 
-or zc.buildout:
+or zc.buildout (http://buildout.org):
 
 .. code::
 
@@ -47,7 +47,12 @@ or zc.buildout:
     $ python bootstrap.py
     $ bin/buildout
 
+There is no need to run "python bootstrap.py" each time,
+but you need indeed to run "python bootstrap.py" in the following cases:
 
+    * you building a new buildout
+    * you want to switch to a different python
+    * you want to switch to a different version of setuptools or zc.buildot
 
 
 ************
