@@ -8,9 +8,9 @@ here = os.path.dirname(os.path.abspath(__file__))
 bad_presentation = os.path.join(here, 'bad_presentation.pdf')
 not_so_bad_presentation = os.path.join(here, 'not_so_bad_presentation.pdf')
 good_presentation = os.path.join(here, 'good_presentation.pdf')
-config1 = os.path.join(here, 'config1')
-config2 = os.path.join(here, 'config2')
-config3 = os.path.join(here, 'config3')
+config1 = os.path.join(here, 'config_detailed_optimized')
+config2 = os.path.join(here, 'config_categories_only')
+config3 = os.path.join(here, 'config_simple_sensitive')
 
 REBASE = False
 
