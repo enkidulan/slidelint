@@ -80,7 +80,7 @@ class TestLinterRunner(unittest.TestCase):
         self.kwargs = {
             'target_file': 'presentation.pdf',
             'config_file': os.path.join(here, 'test_models.cfg'),
-            'output': {'format': 'raw', 'files_output': False, 'ids': True},
+            'output': {'format': 'raw', 'files_output': None, 'ids': True},
             'enable_disable_ids': (None, None),
             'msg_info': None,
             'group': "slidelint.tests"}

@@ -54,7 +54,7 @@ The tests checks most common usage-cases of slidelint:
 
       ::
 
-        bin/slidelint -f html --files-output  presentation.pdf
+        bin/slidelint -f html --files-output=output.txt  presentation.pdf
 
     *  using custom configiration files
 

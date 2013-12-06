@@ -101,7 +101,7 @@ Run a file check
   -f <format> --output-format=<format>  Set the output format
                                         (e.g. text,parseable,colorized,msvs,html)
                                         [default: text]
-  --files-output
+  --files-output=<result_file>     save linting results to result_file file
   -e <msg_ids> --enable=<msg_ids>  Enable the message, category or checker with the given id(s). You can either give multiple
                                          identifier separated by comma (,)
   -d <msg_ids> --disable=<msg_ids>  Disable the message, category or checker with the given id(s). You can either give multiple
@@ -121,7 +121,7 @@ the result as an html files(separated file for each category):
 
 ::
 
-    $ slidelint --files-output  -f html presentation.pdf
+    $ slidelint --files-output=linting.txt  -f html presentation.pdf
 
 
 Read a configuration from default config file. Disable all checks from 'ContentQuality'

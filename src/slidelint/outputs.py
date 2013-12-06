@@ -107,7 +107,7 @@ REPORTERS_MAPING = {
 
 
 def output_handler(path, rezults, mute_ids='', output_format='text',
-                   report_file=False, show_id=False):
+                   report_file=None, show_id=False):
     """
     Formating check results and handling its output.
     Takes:
@@ -138,8 +138,9 @@ def output_handler(path, rezults, mute_ids='', output_format='text',
     formater = REPORTERS_MAPING.get(output_format, TextReporter)(
         show_id, mute_ids, path)
     formated_report = formater(rezults)
-    if report_file:
-        name = os.path.split(path)[1][:-3] + 'lintrez'
+    if report_file is not None:
+        # in case if report_file is an empty string ''
+        name = report_file or os.path.split(path)[1][:-3] + 'lintrez'
         with open(name, 'wb') as output_file:
             output_file.write(formated_report)
     else:

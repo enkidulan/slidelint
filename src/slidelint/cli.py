@@ -14,7 +14,7 @@ Options:
   -f <format> --output-format=<format>  Set the output format
                                         (e.g. text,parseable,colorized,
                                         msvs,html) [default: text]
-  --files-output
+  --files-output=<result_file>     save linting results to result_file file
   -e <msg_ids> --enable=<msg_ids>  Enable the message, report, category or
                                    checker with the given id(s). You can either
                                    give multiple identifier separated by comma
@@ -50,7 +50,8 @@ def lint(target_file, config_file, output, enable_disable_ids,
             format - format of the output report, it's None
                      or one of [text', 'parseable', 'colorized',
                      'msvs', 'html'],
-            files_output - True or False, if True than report will be
+            files_output - file path, empty string or None, if empty
+                           string than report will be
                            written to file otherwise printed to stdout,
             ids - if True then messages ids will be added to report
         * enable_disable_ids - command-line options for enabling/disabling

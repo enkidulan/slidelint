@@ -85,7 +85,10 @@ class TestSequenceFunctions(unittest.TestCase):
     def test_file_output(self):
         with TempDirectory() as d:
             os.chdir(d.path)
-            output_handler(self.path, self.rezults, report_file=True)
+            output_handler(
+                self.path,
+                self.rezults,
+                report_file='presentation.lintrez')
             compare(
                 d.read('presentation.lintrez'),
                 "********************** Slide Deck presentation.pdf\n"

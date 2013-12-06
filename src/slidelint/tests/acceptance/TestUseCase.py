@@ -92,15 +92,14 @@ class TestAcceptance(unittest.TestCase):
 
     def test_file_output_file(self):
         with api.lcd(self.dir):
-            rez = run("bin/slidelint -f html --files-output  "
-                      "%s" % bad_presentation)
-            testfixtures.compare(
-                rez,
-                "No config file found, using default configuration")
-            try:
-                rez = run("cat bad_presentation.lintrez")
-            finally:
-                run("rm -f bad_presentation.lintrez")
+            with tempdir.TempDir() as tmp_folder:
+                rez_file = os.path.join(tmp_folder, 'lintrez.txt')
+                rez = run("bin/slidelint -f html --files-output=%s  "
+                          "%s" % (rez_file, bad_presentation))
+                testfixtures.compare(
+                    rez,
+                    "No config file found, using default configuration")
+                rez = run("cat %s" % rez_file)
             rez_file = bad_presentation[:-3] + 'fileoutput_default.txt'
             if REBASE:
                 with open(rez_file, 'wb') as f:
