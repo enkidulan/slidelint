@@ -531,7 +531,7 @@ def get_java():
     cmd = ["update-alternatives", "--query", "java"]
     try:
         output = SubprocessTimeoutHelper(cmd)()
-    except OSError:
+    except (OSError, IOError):
         return 'java'
     for line in output:
         if not line.startswith("Alternative: "):
