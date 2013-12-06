@@ -25,28 +25,39 @@ def run(*arg, **kwargs):
             "%s:\n%s" % (api.env.host_string, repr(arg), message.message))
 
 
-class TestAcceptance(unittest.TestCase):
-
+@unittest.skip("This testsuite depends on network access so we skip it"
+               "by default")
+class TestAcceptanceManual(unittest.TestCase):
     # this setUpClass and tearDownClass creating a new venv and install
     # slidelint with pip from your local copy of slidelint sources, so all
     # tests of this testsute will be executed inside this venv;
-    # to make this active comment setUp function
-    # and uncomment setUpClass and tearDownClass methods.
-    # You need to use this testsute setup with creating new venv only in case
-    # of changes in setup.py file.
-    # @classmethod
-    # def setUpClass(cls):
-    #     cls.location = tempdir.TempDir()
-    #     cls.dir = cls.location.name
-    #     package_location = os.getcwd()
-    #     venv_location = os.path.join(package_location, 'bin', 'virtualenv')
-    #     with api.lcd(cls.dir):
-    #         run("%s --no-site-packages ." % venv_location)
-    #         run("bin/pip install %s" % package_location)
 
-    # @classmethod
-    # def tearDownClass(cls):
-    #     cls.location.dissolve()
+    def test_manual_run(self):
+        with tempdir.TempDir() as tmp_folder:
+            dir = tmp_folder.name
+            package_location = os.getcwd()
+            venv_location = os.path.join(package_location, 'bin', 'virtualenv')
+            with api.lcd(dir):
+                run("%s --no-site-packages ." % venv_location)
+                run("bin/pip install %s" % package_location)
+                rez_file = 'lintrez.txt'
+                rez = run("bin/slidelint -f html --files-output=%s  "
+                          "%s" % (rez_file, bad_presentation))
+                testfixtures.compare(
+                    rez,
+                    "No config file found, using default configuration")
+                rez = run("cat %s" % rez_file)
+                rez_file = bad_presentation[:-3] + 'fileoutput_default.txt'
+                if REBASE:
+                    with open(rez_file, 'wb') as f:
+                        f.write(rez)
+                else:
+                    testfixtures.compare(
+                        rez,
+                        open(rez_file, 'rb').read())
+
+
+class TestAcceptance(unittest.TestCase):
 
     def setUp(self):
         self.dir = os.getcwd()

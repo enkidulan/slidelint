@@ -10,6 +10,12 @@ To run all test simply do:
 
     $ bin/nosetests slidelint
 
+To run all test including network depended also do:
+
+::
+
+    $ bin/nosetests slidelint --no-skip
+
 or if you want to execute some particular test just pass to nosetests
 information about its location
 
