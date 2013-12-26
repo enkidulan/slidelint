@@ -13,10 +13,12 @@ class TestSequenceFunctions(unittest.TestCase):
             {'id': 'W1010',
              'page': '2',
              'msg': 'message 1',
+             'help': 'help 1',
              'msg_name': 'short-name-1'},
             {'id': 'C5010',
              'page': '4',
              'msg': 'message 4',
+             'help': 'help 2',
              'msg_name': 'short-name-4'}]
 
     def tearDown(self):
@@ -52,6 +54,15 @@ class TestSequenceFunctions(unittest.TestCase):
             "********************** Slide Deck presentation.pdf\n"
             "presentation.pdf:2: [W1010(short-name-1), ] message 1\n"
             "presentation.pdf:4: [C5010(short-name-4), ] message 4\n")
+
+    def test_json_format(self):
+        with OutputCapture() as output:
+            output_handler(self.path, self.rezults, output_format='json')
+        output.compare(
+            '[{"msg": "message 1", "msg_name": "short-name-1", "help": '
+            '"help 1", "id": "W1010", "page": "2"}, {"msg": "message 4"'
+            ', "msg_name": "short-name-4", "help": "help 2", "id": "C50'
+            '10", "page": "4"}]')
 
     def test_msvs_format(self):
         with OutputCapture() as output:

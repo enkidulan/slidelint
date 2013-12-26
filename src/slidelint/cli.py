@@ -13,7 +13,7 @@ Options:
   --config=<configfile>  path to configuration file
   -f <format> --output-format=<format>  Set the output format
                                         (e.g. text,parseable,colorized,
-                                        msvs,html) [default: text]
+                                        msvs,html,json) [default: text]
   --files-output=<result_file>     save linting results to result_file file
   -e <msg_ids> --enable=<msg_ids>  Enable the message, report, category or
                                    checker with the given id(s). You can either

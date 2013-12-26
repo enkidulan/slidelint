@@ -5,10 +5,6 @@
 .. contents::
 
 
-.. warning::
-    This package is still in deep development.
-
-
 ************
 Installation
 ************
@@ -99,7 +95,7 @@ Run a file check
   -i --include-ids       include ids in report [default: False]
   --config=<configfile>  path to configuration file
   -f <format> --output-format=<format>  Set the output format
-                                        (e.g. text,parseable,colorized,msvs,html)
+                                        (e.g. text,parseable,colorized,msvs,html,json)
                                         [default: text]
   --files-output=<result_file>     save linting results to result_file file
   -e <msg_ids> --enable=<msg_ids>  Enable the message, category or checker with the given id(s). You can either give multiple

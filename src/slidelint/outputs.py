@@ -3,10 +3,20 @@ Output handlers and formatters
 """
 import os
 import sys
+import json
 from colorama import Fore
 
 import logging
 USER_MESSAGES = logging.getLogger('user_messages')
+
+
+class JsonFormatter():
+    def __init__(self, show_id, mute_ids, path):
+        self.mute_ids = mute_ids
+
+    def __call__(self, report):
+        filtred = [msg for msg in report if msg['id'] not in self.mute_ids]
+        return json.dumps(filtred)
 
 
 class BaseReporter(object):
@@ -103,7 +113,8 @@ REPORTERS_MAPING = {
     'parseable': ParseableTextReporter,
     'colorized': ColorizedTextReporter,
     'msvs': VSTextReporter,
-    'html': HTMLTextReporter}
+    'html': HTMLTextReporter,
+    'json': JsonFormatter}
 
 
 def output_handler(path, rezults, mute_ids='', output_format='text',
@@ -119,7 +130,7 @@ def output_handler(path, rezults, mute_ids='', output_format='text',
                   'msg_name': 'short-name-1'}, ...]
         * output_format - output format(in case of unknown format
                           the default 'text' will be applied) :
-                          text|parseable|colorized|msvs|html
+                          text|parseable|colorized|msvs|html|json
         * mute_ids - messages ids to not include in report: ['W1010', 'C2345']
         * report_file - store report to file or to sys.stdout, report file
           will be stored in the work directory with same name as checking
