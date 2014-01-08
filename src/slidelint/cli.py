@@ -19,7 +19,7 @@ Options:
                                    checker with the given id(s). You can either
                                    give multiple identifier separated by comma
                                    (,) or put this option multiple time.
-  -d <msg_ids> --disable=<msg_ids>  Enable the message, report, category or
+  -d <msg_ids> --disable=<msg_ids>  Disable the message, report, category or
                                     checker with the given id(s). You can
                                     either give multiple identifier separated
                                     by comma (,) or put this option
