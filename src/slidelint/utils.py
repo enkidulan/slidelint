@@ -1,7 +1,9 @@
 """ Bunch of helping classes and functions """
+import cStringIO as StringIO
 import os
 import subprocess
 import threading
+import traceback
 from multiprocessing import Process, Queue
 
 import logging
@@ -51,9 +53,12 @@ def processes_wrapper(queue, funk, kwargs):
         queue.put(rez)
     # there is a need to catch all possible exceptions
     except Exception, msg:  # pylint: disable=W0703
+	tb = StringIO.StringIO()
+	traceback.print_exc(file=tb)
+
         info = "The function '%s' of '%s' module "\
-               "raised an Exception:\n" % (funk.__name__, funk.__module__)
-        queue.put(info + msg.message)
+               "raised an Exception:\n\n" % (funk.__name__, funk.__module__)
+        queue.put(info + msg.message + tb.getvalue())
 
 
 class MultiprocessingManager(object):
