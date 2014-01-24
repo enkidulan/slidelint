@@ -53,7 +53,7 @@ def processes_wrapper(queue, funk, kwargs):
     except Exception, msg:  # pylint: disable=W0703
         info = "The function '%s' of '%s' module "\
                "raised an Exception:\n" % (funk.__name__, funk.__module__)
-        queue.put(info + msg.message)
+        queue.put(info + str(msg.message))
 
 
 class MultiprocessingManager(object):
