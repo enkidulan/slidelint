@@ -2,12 +2,16 @@
 from slidelint.utils import help_wrapper
 from slidelint.utils import SubprocessTimeoutHelper
 from slidelint.pdf_utils import convert_pdf_to_text
+
+import cStringIO as StringIO
 import os
-import subprocess
-from lxml import etree
-import socket
-from appdirs import user_data_dir
 import requests
+import socket
+import subprocess
+import traceback
+
+from appdirs import user_data_dir
+from lxml import etree
 
 PACKAGE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LT_PATH = os.path.join(PACKAGE_ROOT, 'LanguageTool')
@@ -635,7 +639,19 @@ class LanguagetoolServer(object):
                                                             self.config_file)
             self.url = 'http://127.0.0.1:%s' % self.port
             content = requests.post(self.url, data=data, timeout=15)
-        root = etree.fromstring(content.text.encode('utf-8'))
+        try:
+            root = etree.fromstring(content.text.encode('utf-8'))
+        except etree.XMLSyntaxError, e:
+            # Add the content to the traceback
+            tb = StringIO.StringIO()
+            traceback.print_exc(file=tb)
+            e.message += """
+--
+%s
+--
+""" % (content.text.encode('utf-8'))
+            raise
+
         return root.findall('error')
 
     def __enter__(self):
